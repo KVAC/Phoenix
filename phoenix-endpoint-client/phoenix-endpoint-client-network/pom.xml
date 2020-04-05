@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>phoenix-endpoint-client</groupId>
+		<artifactId>phoenix-endpoint-client</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>phoenix-endpoint-client-network</groupId>
+	<artifactId>phoenix-endpoint-client-network</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>phoenix-libs-events</groupId>
+			<artifactId>phoenix-libs-events</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>phoenix-libs</groupId>
+			<artifactId>phoenix-libs-objects</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+</project>
