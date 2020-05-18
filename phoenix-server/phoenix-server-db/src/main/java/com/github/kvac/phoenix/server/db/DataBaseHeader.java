@@ -7,8 +7,11 @@ import lombok.Setter;
 
 public class DataBaseHeader {
 	@Getter
-	private static Database dataBase = new Database();
+	private static final Database dataBase = new Database();
 
+        @Getter
+        private static final DataBaseHandler dataBaseHandler=new DataBaseHandler();
+        
 	@Getter
 	@Setter
 	private static ServerConfig config = new ServerConfig();

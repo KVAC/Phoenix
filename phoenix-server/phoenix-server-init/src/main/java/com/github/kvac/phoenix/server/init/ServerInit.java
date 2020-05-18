@@ -1,9 +1,14 @@
 package com.github.kvac.phoenix.server.init;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.libs.network.HEADER_NETWORK;
 import com.github.kvac.phoenix.libs.objects.Ping;
 import com.github.kvac.phoenix.server.db.DataBaseHeader;
 import com.github.kvac.phoenix.server.network.NetWorkHeader;
+import com.github.kvac.phoenix.server.network.server.connection.ServerWorker;
+import java.io.IOException;
+import java.sql.SQLException;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jdcs_dev
@@ -11,37 +16,37 @@ import com.github.kvac.phoenix.server.network.NetWorkHeader;
  */
 public class ServerInit {
 
-	/**
-	 * @param args
-	 * 
-	 */
-	public static void main(String[] args) {
-		try {
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServerInit.class);
 
-			// System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, Level.INFO.toString());
-			DataBaseHeader.getDataBase().init();
-			DataBaseHeader.getDataBase().connect();
-			DataBaseHeader.getDataBase().create();
-			// DataBaseHeader.getDataBaseHandler().start();
+    /**
+     * @param args
+     *
+     */
+    public static void main(String[] args) {
+        try {
+            DataBaseHeader.getDataBase().init();
 
-			NetWorkHeader.getServer().start();
+            DataBaseHeader.getDataBase().connect();
 
-			new Thread(new Runnable() {
+            DataBaseHeader.getDataBase().create();
+            DataBaseHeader.getDataBaseHandler().start();
 
-				@Override
-				public void run() {
-					Ping pong = new Ping();
-					do {
-						EventHEADER.getBus_Pong().post(pong);
-						try {
-							Thread.sleep(3000);
-						} catch (InterruptedException e) {
-						}
-					} while (true);
-				}
-			}).start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            NetWorkHeader.getServer().start();
+
+            new Thread(() -> {
+                Thread.currentThread().setName("SERVER_PONG");
+                Ping pong = new Ping();
+                do {
+                    EventHEADER.getBus_Pong().post(pong);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+                        logger.warn("", ex);
+                    }
+                } while (true);
+            }).start();
+        } catch (SQLException | IOException ex) {
+            logger.warn("", ex);
+        }
+    }
 }

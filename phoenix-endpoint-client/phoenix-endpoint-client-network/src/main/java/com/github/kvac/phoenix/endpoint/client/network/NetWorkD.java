@@ -10,23 +10,17 @@ public class NetWorkD extends Thread implements Runnable {
 	@Override
 	public void run() {
 		// PING
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Thread.currentThread().setName("NetWorkD.PING");
-				do {
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				} while (true);
-			}
-		}).start();
+		new Thread(() -> {
+                    Thread.currentThread().setName("NetWorkD.PING");
+                    do {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } while (true);
+                }).start();
 		// PING
 
-		do {
-
-		} while (true);
 	}
 }

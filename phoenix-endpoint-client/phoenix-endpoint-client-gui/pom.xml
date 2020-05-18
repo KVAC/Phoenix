@@ -10,6 +10,13 @@
 	<artifactId>phoenix-endpoint-client-gui</artifactId>
 
 	<dependencies>
+		<!-- DB -->
+		<dependency>
+			<groupId>phoenix-endpoint-client</groupId>
+			<artifactId>phoenix-endpoint-client-db</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- DB -->
 		<dependency>
 			<groupId>phoenix-libs</groupId>
 			<artifactId>phoenix-libs-objects</artifactId>

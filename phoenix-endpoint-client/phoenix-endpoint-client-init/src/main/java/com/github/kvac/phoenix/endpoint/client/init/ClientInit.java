@@ -1,50 +1,126 @@
 package com.github.kvac.phoenix.endpoint.client.init;
 
-import java.sql.SQLException;
-
 import com.github.kvac.phoenix.endpoint.client.db.DataBaseHeader;
 import com.github.kvac.phoenix.endpoint.client.gui.ClientGui;
+import com.github.kvac.phoenix.endpoint.client.gui.First_Settings;
 import com.github.kvac.phoenix.endpoint.client.network.NetWorkHeader;
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
 import com.github.kvac.phoenix.libs.objects.Ping;
+import com.github.kvac.phoenix.libs.objects.cs.CS;
+import com.github.kvac.phoenix.libs.objects.events.MyEvent;
+import com.github.kvac.phoenix.libs.objects.events.MyEvent.TYPE;
 import com.j256.ormlite.logger.LocalLog;
 import com.j256.ormlite.logger.Log.Level;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.sql.SQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ClientInit {
-	public static void main(String[] args) throws SQLException {
-		System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, Level.INFO.toString());
 
-		// FIXME
-		new NetWorkHeader();
+    protected static final Logger logger = LoggerFactory.getLogger(ClientInit.class);
 
-		DataBaseHeader.getDataBase().connect();// YED 28.03.2020
-		DataBaseHeader.getDataBase().CreateDB();// YED 28.03.2020
-		DataBaseHeader.getDataBase().createDefault();// YED 28.03.2020
-		DataBaseHeader.getDataBase().restoreInfo();// YED 28.03.2020
+    public static void main(String[] args) throws SQLException {
+        System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, Level.INFO.toString());
 
-		DataBaseHeader.getDataBaseHandler().start();
+        NetWorkHeader netWorkHeader = new NetWorkHeader();
+        netWorkHeader.getClass();
+        DataBaseHeader.getDataBase().connect();// YED 28.03.2020
+        DataBaseHeader.getDataBase().CreateDB();// YED 28.03.2020
 
-		NetWorkHeader.getNetWorkD().start();
-		NetWorkHeader.getClientHandler().start();
+        // первоначальная настройка
+        // Мои настройки
+        if (DataBaseHeader.getDataBase().getSettingsDao().countOf() == 0) {
+            logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawwwwwwwwwwwwwwwwwwww");
+            First_Settings first_Settings = new First_Settings();
+            first_Settings.setVisible(true);
 
-		ClientGui clientGui = new ClientGui();
-		clientGui.setVisible(true);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                logger.error(e.toString());
+            }
+            first_Settings.getTextArea1().setText(first_Settings.getTextArea1().getText().replaceAll(" ", ""));
+            while (!InitUtils.checkSettingsAv()) {
+                //
+                //
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    logger.error("IN while (!InitUtils.checkSettingsAv())", e);
+                }
+            }
+            first_Settings.setVisible(false);
 
-		new Thread(new Runnable() {
+        }
+        // Мои настройки
+        // Начальные сервера
+        // Начальные сервера
+        // первоначальная настройка
 
-			@Override
-			public void run() {
-				Ping ping = new Ping();
-				do {
-					EventHEADER.getBus_Ping().post(ping);
+        // DataBaseHeader.getDataBase().createDefault();// YED 28.03.2020
+        DataBaseHeader.getDataBase().restoreInfo();// YED 28.03.2020
 
-					try {
-						Thread.sleep(300);
-					} catch (InterruptedException e) {
-					}
-				} while (true);
-			}
-		}).start();
+        DataBaseHeader.getDataBaseHandler().start();
 
-	}
+        NetWorkHeader.getNetWorkD().start();
+        NetWorkHeader.getClientHandler().start();
+
+        ClientGui clientGui = new ClientGui();
+        clientGui.setVisible(true);
+
+        new Thread(() -> {
+            Thread.currentThread().setName("My cs sender Thread");
+            do {
+                CS cs = NetWorkHeader.getMycs();
+                MyEvent event = new MyEvent();
+                event.setObject(cs);
+                event.setType(TYPE.CS_C);
+                EventHEADER.getBus_cs_clear().post(event);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    logger.error(Thread.currentThread().getName(), e);
+                }
+            } while (true);
+        }).start();
+
+        new Thread(() -> {
+            Thread.currentThread().setName("Client Ping");
+            Ping ping = new Ping();
+            do {
+                EventHEADER.getBus_Ping().post(ping);
+         //       logger.info("count:" + NetWorkHeader.getHostPortConnectedList().size());
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                }
+            } while (true);
+        }).start();
+
+        new Thread(() -> {
+            Thread.currentThread().setName("INFO");
+            do {
+
+                //  System.out.println(INFO.getExternalIP());
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    logger.error(Thread.currentThread().getName(), e);
+                }
+            } while (true);
+        }).start();
+    }
+
+    public static void getExternalIpAdress() throws IOException {
+        URL whatismyip = new URL("http://checkip.amazonaws.com");
+        BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+        String ip = in.readLine();
+        System.out.println(ip);
+
+    }
 }

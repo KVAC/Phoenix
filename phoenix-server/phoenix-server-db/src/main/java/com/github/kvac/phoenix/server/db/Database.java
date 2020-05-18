@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.kvac.phoenix.libs.objects.ServerConfig;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
+import com.github.kvac.phoenix.libs.objects.cs.S;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.DataSourceConnectionSource;
@@ -33,7 +34,8 @@ public class Database {
 	DataSourceConnectionSource connectionSource;
 	@Getter
 	Dao<CS, String> CsDao;
-
+	@Getter
+	Dao<S, String> ServerDao;
 	//
 	//
 
@@ -80,7 +82,7 @@ public class Database {
 				DataBaseHeader.getConfig().getServerDB_host() + "/" + DataBaseHeader.getConfig().getServerDB_DB());
 
 		DataBaseHeader.dbPATH = configStringBuilder.toString();
-		}
+	}
 
 	public static DataSource createDataSource() {
 		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(DataBaseHeader.dbPATH,
@@ -95,12 +97,19 @@ public class Database {
 	public void connect() throws SQLException {
 		connectionSource = new DataSourceConnectionSource(createDataSource(), DataBaseHeader.dbPATH);
 		CsDao = DaoManager.createDao(connectionSource, CS.class);
+		ServerDao=DaoManager.createDao(connectionSource, S.class);
 		// photoeDao = DaoManager.createDao(connectionSource, Photoe.class);
 		// photoPA = DaoManager.createDao(connectionSource, PrePhoto.class);
 	}
 
 	public void create() throws SQLException {
 		TableUtils.createTableIfNotExists(connectionSource, CS.class);
+		TableUtils.createTableIfNotExists(connectionSource, S.class);
+	}
 
+	public void saveCS(CS cs) throws SQLException {
+		if (!CsDao.idExists(cs.getID())) {
+			CsDao.createOrUpdate(cs);
+		}
 	}
 }

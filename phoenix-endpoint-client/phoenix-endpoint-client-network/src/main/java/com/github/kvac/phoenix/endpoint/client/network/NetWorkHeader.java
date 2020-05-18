@@ -1,14 +1,20 @@
 package com.github.kvac.phoenix.endpoint.client.network;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.libs.objects.HostPortConnected;
 import com.github.kvac.phoenix.libs.objects.MySettings;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent;
 import com.google.common.eventbus.Subscribe;
-
+import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.Getter;
+import lombok.Setter;
 
 public class NetWorkHeader {
+
+	@Getter
+	@Setter
+	private static CopyOnWriteArrayList<HostPortConnected> HostPortConnectedList = new CopyOnWriteArrayList<HostPortConnected>();
 
 	@Getter
 	private static CS mycs = new CS();
@@ -27,7 +33,7 @@ public class NetWorkHeader {
 	private void update(MyEvent event) {
 		if (MyEvent.isSettingsUpdate(event)) {
 			MySettings settings = (MySettings) event.getObject();
-			
+
 			if (settings.getMyID() != null) {
 				mycs.setID(settings.getMyID());
 			}
@@ -35,7 +41,6 @@ public class NetWorkHeader {
 				if (settings.getNameTime() > mycs.getNameTime()) {
 					mycs.setName(settings.getName());
 					mycs.setNameTime(settings.getNameTime());
-
 				}
 			}
 			if (settings.getAddress() != null) {

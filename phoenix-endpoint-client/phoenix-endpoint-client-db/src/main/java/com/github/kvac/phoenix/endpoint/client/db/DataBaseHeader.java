@@ -3,9 +3,13 @@ package com.github.kvac.phoenix.endpoint.client.db;
 import lombok.Getter;
 
 public class DataBaseHeader {
-	public static  String DB_NAME_STRING = "jdbc:sqlite:JDCS.s3db";
+
+    /**
+     *
+     */
+    public static  String DB_NAME_STRING = "jdbc:sqlite:JDCS.s3db";
 	@Getter
-	private static DataBase dataBase = new DataBase();
+	private static final DataBase dataBase = new DataBase();
 	@Getter
-	private static DataBaseHandler dataBaseHandler=new DataBaseHandler();
+	private static final DataBaseHandler dataBaseHandler=new DataBaseHandler();
 }

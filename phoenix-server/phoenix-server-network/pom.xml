@@ -12,7 +12,19 @@
 	<dependencies>
 		<dependency>
 			<groupId>phoenix-libs</groupId>
-	<artifactId>phoenix-libs-objects</artifactId>
+			<artifactId>phoenix-libs-objects</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>phoenix-libs-network</groupId>
+			<artifactId>phoenix-libs-network</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>phoenix-server-db</groupId>
+			<artifactId>phoenix-server-db</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

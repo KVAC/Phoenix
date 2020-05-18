@@ -14,43 +14,42 @@ import lombok.Setter;
 
 public class CSListRenderer extends JLabel implements ListCellRenderer<CS> {
 
-	private static final long serialVersionUID = 1L;
-	@Getter
-	@Setter
-	private ClientGui parent;
+    private static final long serialVersionUID = 1L;
+    @Getter
+    @Setter
+    private ClientGui parent;
 
-	public CSListRenderer(ClientGui clientGui) {
-		setParent(clientGui);
-	}
+    public CSListRenderer(ClientGui clientGui) {
+        setParent(clientGui);
+    }
 
-	@Override
-	public Component getListCellRendererComponent(JList<? extends CS> list, CS cs, int index, boolean isSelected,
-			boolean cellHasFocus) {
+    @Override
+    public Component getListCellRendererComponent(JList<? extends CS> list, CS cs, int index, boolean isSelected,
+            boolean cellHasFocus) {
 
-		// String code = country.getCode();
-		// ImageIcon imageIcon = new ImageIcon(getClass().getResource("/images/" + code
-		// + ".png"));
+        // String code = country.getCode();
+        // ImageIcon imageIcon = new ImageIcon(getClass().getResource("/images/" + code
+        // + ".png"));
+        // setIcon(imageIcon);
+        setText(cs.getName());
 
-		// setIcon(imageIcon);
-		setText(cs.getName());
+        if (isSelected) {
+            setBackground(Color.GREEN);
+            setForeground(Color.GREEN);
 
-		if (isSelected) {
-			setBackground(Color.GREEN);
-			setForeground(Color.GREEN);
+        } else {
+            setBackground(list.getBackground());
+            setForeground(list.getForeground());
+        }
+        if (getParent().getJlist_Contact().getSelectedValuesList().size() != 1) {
+            // getParent().getList_messages().setEnabled(false);
+            getParent().getTextField_message().setEditable(false);
+        } else {
 
-		} else {
-			setBackground(list.getBackground());
-			setForeground(list.getForeground());
-		}
-		if (getParent().getList_CS().getSelectedValuesList().size() != 1) {
-			// getParent().getList_messages().setEnabled(false);
-		getParent().getTextField_message().setEditable(false);
-		} else {
-
-			getParent().getTextField_message().setEditable(true);
-			// getParent().getList_messages().setEnabled(true);
-		}
-		return this;
-	}
+            getParent().getTextField_message().setEditable(true);
+            // getParent().getList_messages().setEnabled(true);
+        }
+        return this;
+    }
 
 }
