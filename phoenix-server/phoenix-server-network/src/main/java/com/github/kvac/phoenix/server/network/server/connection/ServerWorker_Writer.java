@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ServerWorker_Writer implements Runnable {
 
-    
     protected static final Logger logger = LoggerFactory.getLogger(ServerWorker_Writer.class);
     @Getter
     @Setter
