@@ -12,9 +12,15 @@ import org.apache.commons.lang3.StringUtils;
 @DatabaseTable(tableName = "Servers")
 public class S {
 
+    @Getter
+    @Setter
     String fingerprint;
 
+    @Getter
+    @Setter
     Object pgpPublicKey;
+    @Getter
+    @Setter
     Object sslCert;
 
     public static boolean validServer(String server) {

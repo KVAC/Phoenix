@@ -1,7 +1,20 @@
 package com.github.kvac.phoenix.endpoint.client.network.connection;
 
 import com.github.kvac.phoenix.endpoint.client.network.NetWorkHeader;
+import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.event.PhoenixEvent;
+import com.github.kvac.phoenix.event.msg.MessageEvent;
+import com.github.kvac.phoenix.libs.objects.Auth;
 import com.github.kvac.phoenix.libs.objects.HostPortConnected;
+import com.github.kvac.phoenix.libs.objects.Message;
+import com.github.kvac.phoenix.libs.objects.Ping;
+import com.github.kvac.phoenix.libs.objects.cs.CS;
+import com.github.kvac.phoenix.libs.objects.events.MyEvent;
+import com.github.kvac.phoenix.libs.objects.events.MyEvent.TYPE;
+import com.github.kvac.phoenix.libs.objects.events.ra.request.MessageRequest;
+import com.github.kvac.phoenix.libs.objects.events.ra.request.RSearchCS;
+import com.github.kvac.phoenix.libs.objects.events.ra.request.Request;
+import com.google.common.eventbus.Subscribe;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
@@ -12,6 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phoenixendpointclient.phoenix.endpoint.client.events.ClientEventHEADER;
 
 public class Client implements Runnable {
 
@@ -51,6 +65,9 @@ public class Client implements Runnable {
         Thread.currentThread().setName("(Writer): " + getHpc().getHost() + ":" + getHpc().getPort());
         try {
             openWriterStream();
+            //IDENT
+            authMe();
+            //IDENT
             register();
             new Thread(new Client_Reader(clientThis)).start();
             while (marker == false) {
@@ -64,7 +81,7 @@ public class Client implements Runnable {
 
         NetWorkHeader.getHostPortConnectedList().remove(getHpc());
         logger.info(Thread.currentThread().getName() + " Hpc removed");
-
+        unregister();
         try {
             logger.info(Thread.currentThread().getName() + " closing");
             socket.close();
@@ -84,7 +101,77 @@ public class Client implements Runnable {
     }
 
     private void register() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EventHEADER.getBus_Ping().register(clientThis);
+        EventHEADER.getBus_cs_clear().register(clientThis);
+        EventHEADER.getSERVERS_REQUEST_BUS().register(clientThis);
+        ClientEventHEADER.getFORMESSAG_EVENT_BUS().register(clientThis);
+
+        ClientEventHEADER.getFORMESSAG_EVENT_BUS().register(clientThis);
+        ClientEventHEADER.getREQUEST_REMOTE_EVENT_BUS().register(clientThis);
     }
 
+    private void unregister() {
+        EventHEADER.getBus_Ping().unregister(clientThis);
+        EventHEADER.getBus_cs_clear().unregister(clientThis);
+        EventHEADER.getSERVERS_REQUEST_BUS().unregister(clientThis);
+
+        ClientEventHEADER.getFORMESSAG_EVENT_BUS().unregister(clientThis);
+        ClientEventHEADER.getREQUEST_REMOTE_EVENT_BUS().unregister(clientThis);
+    }
+
+    public void send(Object object) {
+        try {
+            getOos().writeObject(object);
+            getOos().flush();
+        } catch (Exception e) {
+            setMarker(true);
+        }
+    }
+
+    @Subscribe
+    public void ping(Ping ping) {
+        send(ping);
+    }
+
+    @Subscribe
+    public void sendOwnCS(MyEvent event) {
+        if (event.getType().equals(TYPE.CS_C)
+                && event.getObject() instanceof CS) {
+            send((CS) event.getObject());
+        }
+    }
+
+    @Subscribe
+    public void sendMessages(MessageEvent messageEvent) {
+        PhoenixEvent.TYPE typem = messageEvent.getType();
+        if (typem.equals(PhoenixEvent.TYPE.MESSAGE_CLEAR)) {
+            if (messageEvent.getObject() instanceof Message) {
+                Message message = (Message) messageEvent.getObject();
+                send(message);
+            }
+        }
+    }
+
+    @Subscribe
+    public void sendRequest(Request request) {
+        if (request instanceof MessageRequest) {
+            send((MessageRequest) request);
+        } else {
+            System.out.println(request.getClass());
+        }
+    }
+
+    @Subscribe
+    public void sendRequestSearchCS(MyEvent event) {
+        if (event.getType().equals(TYPE.CS_SearchR)
+                && event.getObject() instanceof RSearchCS) {
+            send((RSearchCS) event.getObject());
+        }
+    }
+
+    private void authMe() {
+        Auth auth = new Auth();
+        auth.setWho(NetWorkHeader.getMycs());
+        send(auth);
+    }
 }

@@ -20,20 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jdcs_dev
  *
  */
 public class DataBase {
-
+    
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(DataBase.class);
+    
     public DataBase() {
         EventHEADER.getBus_mysettings().register(this);
         EventHEADER.getBus_cs_save().register(this);
     }
-
+    
     JdbcPooledConnectionSource connectionSource;
-
+    
     @Getter
     private Dao<CS, String> CSDao;
     @Getter
@@ -42,7 +45,7 @@ public class DataBase {
     private Dao<Message, String> MessageDao;
     @Getter
     private Dao<S, String> ServerDao;
-
+    
     public void connect() throws SQLException {
         connectionSource = new JdbcPooledConnectionSource(DataBaseHeader.DB_NAME_STRING);
         CSDao = DaoManager.createDao(connectionSource, CS.class);
@@ -50,15 +53,15 @@ public class DataBase {
         MessageDao = DaoManager.createDao(connectionSource, Message.class);
         ServerDao = DaoManager.createDao(connectionSource, S.class);
     }
-
-    public void CreateDB() throws SQLException {
+    
+    public void createDB() throws SQLException {
         TableUtils.createTableIfNotExists(connectionSource, CS.class);
         TableUtils.createTableIfNotExists(connectionSource, MySettings.class);
         TableUtils.createTableIfNotExists(connectionSource, Message.class);
         TableUtils.createTableIfNotExists(connectionSource, S.class);
-
+        
     }
-
+    
     public void createDefault() throws SQLException {
         List<MySettings> settingss = SettingsDao.queryForAll();
         if (settingss.isEmpty()) {
@@ -70,20 +73,20 @@ public class DataBase {
             SettingsDao.createIfNotExists(settings);
         }
     }
-
+    
     public void restoreInfo() throws SQLException {
         List<MySettings> list = SettingsDao.queryForAll();
         if (list.size() == 1) {
             MySettings settings = list.get(0);
-
+            
             MyEvent event = new MyEvent();
             event.setType(TYPE.MySettings_show);
             event.setObject(settings);
-
+            
             EventHEADER.getBus_mysettings().post(event);
         }
     }
-
+    
     @Subscribe
     private void saveCS(MyEvent event) throws SQLException {
         TYPE type = event.getType();
@@ -105,7 +108,7 @@ public class DataBase {
             }
         }
     }
-
+    
     private void cs_save(CS cs) throws SQLException {
         if (CSDao.idExists(cs.getID())) {
             CSDao.update(cs);
@@ -113,14 +116,14 @@ public class DataBase {
             CSDao.create(cs);
         }
     }
-
+    
     private void cs_save_ArrayList(ArrayList<CS> arrayList) throws SQLException {
         for (CS cs : arrayList) {
             cs_save(cs);
         }
         System.err.println("DataBase.cs_save_ArrayList():" + arrayList.size());
     }
-
+    
     public void restoreServers() {
         if (ServerDao != null) {
             for (S s : ServerDao) {
@@ -128,12 +131,21 @@ public class DataBase {
             }
         }
     }
-
+    
     public void saveServer(S server) throws SQLException {
         if (!(this.ServerDao.idExists(server.getId()))) {
             this.ServerDao.create(server);
         } else {
-
+            
+        }
+    }
+    
+    void messageSave(Message message) throws SQLException {
+        if (MessageDao.idExists(message.getMessageID())) {
+            //TODO ПРОВЕРКА СТАТУСА
+        } else {
+            MessageDao.create(message);
+            logger.info(message.getMessageID() + " is saved");
         }
     }
 }

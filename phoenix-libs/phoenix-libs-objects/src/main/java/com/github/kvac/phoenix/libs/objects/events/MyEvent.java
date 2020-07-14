@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class MyEvent {
+    
 	public static enum TYPE {
 		ALL_C,
 		//
@@ -21,7 +22,7 @@ public class MyEvent {
 		//
 		MySettings_save, MySettings_save_addr, MySettings_save_name,
 		//
-		MySettings_show
+		MySettings_show, CS_SearchR,CS_SHOW
 	}
 
 	@Getter
@@ -37,5 +38,4 @@ public class MyEvent {
 		}
 		return false;
 	}
-
 }

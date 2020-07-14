@@ -19,7 +19,7 @@ public class ClientHandler extends Thread implements Runnable {
         EventHEADER.getSERVERS_EVENT_BUS().register(this);
     }
 
-    public static CopyOnWriteArrayList<HostPortPair> hostPortPairs = new CopyOnWriteArrayList<>();
+    public static final CopyOnWriteArrayList<HostPortPair> hostPortPairs = new CopyOnWriteArrayList<>();
 
     protected static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 

@@ -15,6 +15,13 @@
 			<artifactId>phoenix-libs-objects</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+                
+		<dependency>
+			<groupId>phoenix-endpoint-client</groupId>
+			<artifactId>phoenix-endpoint-client-events</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+                
 		<dependency>
 			<groupId>phoenix-libs-events</groupId>
 			<artifactId>phoenix-libs-events</artifactId>

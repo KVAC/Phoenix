@@ -11,6 +11,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jdcs_dev
@@ -19,86 +21,90 @@ import lombok.Setter;
 @DatabaseTable(tableName = "CS")
 public class CS implements Serializable {
 
-	private static final long serialVersionUID = -1806362634493171206L;
+    protected static final Logger logger = LoggerFactory.getLogger(CS.class);
 
-	@Getter
-	@Setter
-	@DatabaseField(id = true)
-	private String ID;
+    private static final long serialVersionUID = -1806362634493171206L;
 
-	@Getter
-	@Setter
-	@DatabaseField
-	private String name;
-	@Getter
-	@Setter
-	@DatabaseField
-	private long nameTime;
+    @Getter
+    @Setter
+    @DatabaseField(id = true, unique = true)
+    private String ID;
 
-	@Getter
-	@Setter
-	@DatabaseField
-	private String Address;
-	@Getter
-	@Setter
-	@DatabaseField
-	private long Address_time;
+    @Getter
+    @Setter
+    @DatabaseField
+    private String name;
+    @Getter
+    @Setter
+    @DatabaseField
+    private long nameTime;
 
-	@Getter
-	@Setter
-	@DatabaseField
-	private String addressFSocket;
-	@Getter
-	@Setter
-	@DatabaseField
-	private long addressFSocketTime;
+    @Getter
+    @Setter
+    @DatabaseField
+    private String Address;
+    @Getter
+    @Setter
+    @DatabaseField
+    private long Address_time;
 
-	@Getter
-	@Setter
-	@DatabaseField
-	private int Port;
-	@Getter
-	@Setter
-	@DatabaseField
-	private long PortTime;
-	@Getter
-	@Setter
-	@DatabaseField
-	private boolean itsMe;
+    @Getter
+    @Setter
+    @DatabaseField
+    private String addressFSocket;
+    @Getter
+    @Setter
+    @DatabaseField
+    private long addressFSocketTime;
 
-	@Getter
-	@Setter
-	@DatabaseField
-	private long port_updaterTime;
-	@Getter
-	@Setter
-	@DatabaseField
-	private int port_updater;
+    @Getter
+    @Setter
+    @DatabaseField
+    private int Port;
+    @Getter
+    @Setter
+    @DatabaseField
+    private long PortTime;
+    @Getter
+    @Setter
+    @DatabaseField
+    private boolean itsMe;
 
-	public void save() {
-		for (int i = 0; i < 1; i++) {
-			if (getID() == null) {
-				continue;
-			}
-			if (this.getID().equals("null")) {
-				continue;
-			}
-			try {
-				MyEvent event = new MyEvent();
-				event.setType(TYPE.Database_CS_SAVE);
-				event.setObject(this);
-				EventHEADER.getBus_cs_save().post(event);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    @Getter
+    @Setter
+    @DatabaseField
+    private long port_updaterTime;
+    @Getter
+    @Setter
+    @DatabaseField
+    private int port_updater;
 
-	@Override
-	public String toString() {
-		return "CS [ID=" + ID + ", name=" + name + ", nameTime=" + nameTime + ", Address=" + Address + ", Address_time="
-				+ Address_time + ", addressFSocket=" + addressFSocket + ", addressFSocketTime=" + addressFSocketTime
-				+ ", Port=" + Port + ", PortTime=" + PortTime + ", itsMe=" + itsMe + ", port_updaterTime="
-				+ port_updaterTime + ", port_updater=" + port_updater + "]";
-	}
+    public void save() {
+        for (int i = 0; i < 1; i++) {
+            if (getID() == null) {
+                logger.error("ID == null", this);
+                continue;
+            }
+            if (this.getID().equals("null")) {
+                logger.error("ID equals null", this);
+                continue;
+            }
+            try {
+                MyEvent event = new MyEvent();
+                event.setType(TYPE.Database_CS_SAVE);
+                event.setObject(this);
+                EventHEADER.getBus_cs_save().post(event);
+            } catch (Exception e) {
+                logger.error("CS.save():EVENT ", e);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "CS [ID=" + ID + ", name=" + name + ", nameTime=" + nameTime + ", Address=" + Address + ", Address_time="
+                + Address_time + ", addressFSocket=" + addressFSocket + ", addressFSocketTime=" + addressFSocketTime
+                + ", Port=" + Port + ", PortTime=" + PortTime + ", itsMe=" + itsMe + ", port_updaterTime="
+                + port_updaterTime + ", port_updater=" + port_updater + "]";
+    }
 }

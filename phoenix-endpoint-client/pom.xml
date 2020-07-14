@@ -13,5 +13,6 @@
   	<module>phoenix-endpoint-client-db</module>
   	<module>phoenix-endpoint-client-gui</module>
   	<module>phoenix-endpoint-client-network</module>
+    <module>phoenix-endpoint-client-events</module>
   </modules>
 </project>

@@ -135,7 +135,7 @@
     </Component>
     <Component class="java.awt.TextArea" name="textArea1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="skanfa.asuscomm.com:2000,skanfa.asuscomm.com:5000,localhost:2000       "/>
+        <Property name="text" type="java.lang.String" value="skanfa.asuscomm.com:2000,localhost:2000,skanfa.asuscomm.com:5000,localhost:5000      "/>
       </Properties>
       <Events>
         <EventHandler event="textValueChanged" listener="java.awt.event.TextListener" parameters="java.awt.event.TextEvent" handler="serverChanged"/>

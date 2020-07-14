@@ -29,7 +29,7 @@ public class First_Settings extends javax.swing.JFrame {
 
     ArrayList<S> serversList = new ArrayList<>();
 
-    public static List<String> invalidStrings = new ArrayList<String>() {
+    static final List<String> invalidStrings = new ArrayList<String>() {
         private static final long serialVersionUID = 1l;
 
         {
@@ -86,7 +86,7 @@ public class First_Settings extends javax.swing.JFrame {
         checkbox_NameValid.setLabel("Имя корректное");
         checkbox_NameValid.setState(true);
 
-        textArea1.setText("skanfa.asuscomm.com:2000,skanfa.asuscomm.com:5000,localhost:2000       ");
+        textArea1.setText("skanfa.asuscomm.com:2000,localhost:2000,skanfa.asuscomm.com:5000,localhost:5000      ");
         textArea1.addTextListener(new java.awt.event.TextListener() {
             public void textValueChanged(java.awt.event.TextEvent evt) {
                 serverChanged(evt);
@@ -211,8 +211,8 @@ public class First_Settings extends javax.swing.JFrame {
 
             if (S.validServer(string)) {
                 S server = S.parseString(string);
-                if (server.getId()==null) {
-                    server.setId(server.getHost()+server.getPort());
+                if (server.getId() == null) {
+                    server.setId(server.getHost() + server.getPort());
                 }
                 serversList.add(server);
             } else {

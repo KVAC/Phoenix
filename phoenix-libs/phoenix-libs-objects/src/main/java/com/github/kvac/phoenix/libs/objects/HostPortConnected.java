@@ -1,11 +1,21 @@
 package com.github.kvac.phoenix.libs.objects;
 
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
 
 public class HostPortConnected {
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.host);
+        hash = 17 * hash + this.port;
+        hash = 17 * hash + (this.connected ? 1 : 0);
+        return hash;
+    }
 
     
     @Getter
