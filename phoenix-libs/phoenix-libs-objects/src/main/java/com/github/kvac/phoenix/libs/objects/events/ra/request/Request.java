@@ -20,7 +20,6 @@ public class Request implements Serializable {
     @Setter
     private CS who;
 
-
     public static enum Type {
 
     }
