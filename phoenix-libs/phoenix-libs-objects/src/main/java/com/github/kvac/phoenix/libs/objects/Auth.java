@@ -14,10 +14,9 @@ import lombok.Setter;
  *
  * @author jdcs_dev
  */
-public class Auth implements Serializable{
+public class Auth implements Serializable {
 
     @Getter
     @Setter
     private CS who;
-
 }

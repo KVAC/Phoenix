@@ -1,6 +1,5 @@
 package com.github.kvac.phoenix.libs.objects.cs;
 
-import java.beans.EventHandler;
 import java.io.Serializable;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
@@ -80,23 +79,21 @@ public class CS implements Serializable {
     private int port_updater;
 
     public void save() {
-        for (int i = 0; i < 1; i++) {
+        try {
             if (getID() == null) {
                 logger.error("ID == null", this);
-                continue;
+                throw new NullPointerException("CS id NPE");
             }
             if (this.getID().equals("null")) {
                 logger.error("ID equals null", this);
-                continue;
+                throw new NullPointerException("CS id not correct (null)");
             }
-            try {
-                MyEvent event = new MyEvent();
-                event.setType(TYPE.Database_CS_SAVE);
-                event.setObject(this);
-                EventHEADER.getBus_cs_save().post(event);
-            } catch (Exception e) {
-                logger.error("CS.save():EVENT ", e);
-            }
+            MyEvent event = new MyEvent();
+            event.setType(TYPE.Database_CS_SAVE);
+            event.setObject(this);
+            EventHEADER.getBus_cs_save().post(event);
+        } catch (Exception e) {
+            logger.error("CS.save():EVENT ", e);
         }
     }
 

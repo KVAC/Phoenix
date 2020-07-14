@@ -17,9 +17,6 @@ import lombok.Setter;
 @DatabaseTable(tableName = "Messages")
 public class Message implements Serializable {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -8416017450078607461L;
 
     public enum field {

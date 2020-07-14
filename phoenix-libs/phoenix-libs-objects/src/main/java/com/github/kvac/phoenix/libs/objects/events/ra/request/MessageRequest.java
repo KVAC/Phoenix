@@ -10,5 +10,4 @@ package com.github.kvac.phoenix.libs.objects.events.ra.request;
  * @author jdcs_dev
  */
 public class MessageRequest extends Request {
-
 }

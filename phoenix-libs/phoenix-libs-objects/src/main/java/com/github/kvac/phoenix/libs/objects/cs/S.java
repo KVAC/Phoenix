@@ -69,13 +69,6 @@ public class S {
     }
 
     public static boolean containsInLIST(List<S> seList, S server) {
-        for (S s : seList) {
-            if (s.getHost().toLowerCase().equals(server.getHost().toLowerCase())) {
-                if (s.getPort() == server.getPort()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return seList.stream().filter(s -> (s.getHost().toLowerCase().equals(server.getHost().toLowerCase()))).anyMatch(s -> (s.getPort() == server.getPort()));
     }
 }

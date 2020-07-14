@@ -30,7 +30,7 @@ public class MySettings {
     @Getter
     @Setter
     @DatabaseField
-    private boolean  shareAddress;
+    private boolean shareAddress;
     @Getter
     @Setter
     @DatabaseField
