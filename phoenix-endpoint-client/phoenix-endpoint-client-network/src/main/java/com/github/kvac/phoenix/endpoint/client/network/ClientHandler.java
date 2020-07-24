@@ -1,15 +1,22 @@
 package com.github.kvac.phoenix.endpoint.client.network;
 
-import com.github.kvac.phoenix.endpoint.client.network.connection.Client;
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
 import com.github.kvac.phoenix.libs.objects.HostPortConnected;
 import com.github.kvac.phoenix.libs.objects.HostPortPair;
+import com.github.kvac.phoenix.libs.objects.Ping;
 import com.github.kvac.phoenix.libs.objects.cs.S;
 import com.google.common.eventbus.Subscribe;
-import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
+import org.apache.mina.core.future.ConnectFuture;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.logging.LoggingFilter;
+import org.apache.mina.transport.socket.nio.NioSocketConnector;
+
+import lombok.Getter;
+import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,101 +25,81 @@ public class ClientHandler extends Thread implements Runnable {
     public ClientHandler() {
         EventHEADER.getSERVERS_EVENT_BUS().register(this);
     }
+    public static final CopyOnWriteArrayList<HostPortPair> hostPortPairs = new CopyOnWriteArrayList<HostPortPair>();
 
-    public static final CopyOnWriteArrayList<HostPortPair> hostPortPairs = new CopyOnWriteArrayList<>();
+    @Getter
+    protected final Logger loggerJ = LoggerFactory.getLogger(getClass());
 
-    protected static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
-
-    private final Thread appender = new Thread(() -> {
-        do {
-            //serversList=
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ex) {
-                java.util.logging.Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } while (true);
-    });
+    boolean pastMethod = false;
+    boolean minaMethod = true;
 
     @Override
     public void run() {
-        appender.start();
-        boolean random = false;
-        do {
-            HostPortPair randomObject = null;
+        minaMethodRun();
+    }
 
-            if (random) {
-                int minrand = 0;
-                int maxrand = hostPortPairs.size();
-                if (maxrand < 1) {
-                    continue;
-                }
-                int randId = getRandomNumberInRange(minrand, maxrand - 1);
-                System.err.println("minrand:" + minrand + "\nmaxrand:" + maxrand + "\nrandId:" + randId + "\nhostPortPairs:" + hostPortPairs.size());
-                randomObject = hostPortPairs.get(randId);
+    private void minaMethodRun() {
+        if (minaMethod) {
+            NetWorkHeader.getConnector().getFilterChain().addLast("logger", new LoggingFilter());
+            //   this.connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
 
-            } else {
+            ObjectSerializationCodecFactory objectSerializationCodecFactory = new ObjectSerializationCodecFactory();
+            objectSerializationCodecFactory.setDecoderMaxObjectSize(Integer.MAX_VALUE);
+            objectSerializationCodecFactory.setEncoderMaxObjectSize(Integer.MAX_VALUE);
+
+            NetWorkHeader.getConnector().getFilterChain().addLast("codec-Serializable", new ProtocolCodecFilter(objectSerializationCodecFactory));
+            NetWorkHeader.getConnector().setConnectTimeoutMillis(30 * 1000);
+            NetWorkHeader.getConnector().setHandler(new MinaClientHandler());
+
+            do {
                 for (HostPortPair hostPortPair : hostPortPairs) {
-                    if (randomObject == null) {
-                        randomObject = hostPortPair;
-                        hostPortPairs.remove(hostPortPair);
+                    HostPortConnected hpc = new HostPortConnected();
+                    hpc.setHost(hostPortPair.getHost());
+                    hpc.setPort(hostPortPair.getPort());
+                    if (HostPortConnected.avInList(NetWorkHeader.getHostPortConnectedList(), hpc)) {
+                        continue;
                     }
-                }
-            }
-
-            if (randomObject != null) {
-                String host = randomObject.getHost();
-                int port = randomObject.getPort();
-                HostPortConnected hpc = new HostPortConnected();
-                hpc.setHost(host);
-                hpc.setPort(port);
-
-                if (!HostPortConnected.avInList(NetWorkHeader.getHostPortConnectedList(), hpc)) {
                     new Thread(() -> {
                         try {
-                            Client client = new Client();
-                            client.setHpc(hpc);
-                            NetWorkHeader.getHostPortConnectedList().add(client.getHpc());
-
-                            try {
-                                client.connect();
-                                logger.info("connected to " + client.getHpc().getHost() + ":" + client.getHpc().getPort());
-                                //
-                                //
-                                new Thread(client).start();
-                                //
-                                //
-                                // System.out.println(client.getHpc().getHost() + ":" + client.getHpc().getPort() + ":"             + (true == (client.getOos() != null)) + ":" + (true == (client.getOis() != null)));
-                            } catch (IOException e) {
-                                NetWorkHeader.getHostPortConnectedList().remove(client.getHpc());
-                            }
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ex) {
-                            logger.error("InterruptedException | IOException", ex);
+                            NetWorkHeader.getHostPortConnectedList().add(hpc);
+                            connect(hpc);//TODO
+                        } catch (Exception e) {
+                            NetWorkHeader.getHostPortConnectedList().remove(hpc);
                         }
                     }).start();
+                    hostPortPairs.remove(hostPortPair);
                 }
+                getLoggerJ().warn(NetWorkHeader.getHostPortConnectedList().size() + "");
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    getLoggerJ().error("", ex);
+                }
+            } while (true);
+        }
 
-                // logger.info("count connections:" + NetWorkHeader.getHostPortConnectedList().size());
-                //NetWorkHeader.getHostPortConnectedList().forEach((hostPortConnected) -> {
-                //      logger.info("HP:" + hostPortConnected);
-                //    });
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                logger.error("InterruptedException:100", ex);
-            }
+    }
 
-        } while (true);
+    private void connect(HostPortConnected hostPortConnected) throws IllegalStateException {
+        ConnectFuture cf = NetWorkHeader.getConnector().connect(new InetSocketAddress(hostPortConnected.getHost(), hostPortConnected.getPort()));
+        cf.awaitUninterruptibly();
+
+        IoSession session = null;
+        try {
+            session = cf.getSession();
+
+            hostPortConnected.setSession(session);
+            //hostPortConnected.getSession().write(new Ping("ПИНГ"));
+        } catch (Exception e) {
+            cf.getSession().getCloseFuture().awaitUninterruptibly();
+            //   NetWorkHeader.getConnector().dispose();
+        }
     }
 
     private static int getRandomNumberInRange(int min, int max) throws IllegalArgumentException {
-
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
         }
-
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
@@ -142,4 +129,5 @@ public class ClientHandler extends Thread implements Runnable {
         }
         return false;
     }
+
 }

@@ -7,7 +7,6 @@ package com.github.kvac.phoenix.endpoint.client.gui.searchcs;
 
 import com.github.kvac.phoenix.endpoint.client.gui.GuiHEADER;
 import com.github.kvac.phoenix.endpoint.client.network.NetWorkHeader;
-import com.github.kvac.phoenix.endpoint.client.network.connection.Client;
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent;
@@ -28,7 +27,7 @@ import phoenixendpointclient.phoenix.endpoint.client.events.ClientEventHEADER;
  */
 public class SearchCS extends javax.swing.JFrame implements WindowListener {
 
-    protected static final Logger logger = LoggerFactory.getLogger(Client.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     SearchCS ThisThis = this;
 
@@ -145,7 +144,6 @@ public class SearchCS extends javax.swing.JFrame implements WindowListener {
             cs1.save();
         });
     }//GEN-LAST:event_addNewCS
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField JTextField_whatSearch;

@@ -1,11 +1,9 @@
 package com.github.kvac.phoenix.server.init;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
-import com.github.kvac.phoenix.libs.network.HEADER_NETWORK;
 import com.github.kvac.phoenix.libs.objects.Ping;
 import com.github.kvac.phoenix.server.db.DataBaseHeader;
-import com.github.kvac.phoenix.server.network.NetWorkHeader;
-import com.github.kvac.phoenix.server.network.server.connection.ServerWorker;
+import com.github.kvac.phoenix.server.network.header.NetWorkHeader;
 import java.io.IOException;
 import java.sql.SQLException;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,7 @@ public class ServerInit {
             DataBaseHeader.getDataBase().create();
             DataBaseHeader.getDataBaseHandler().start();
 
+            NetWorkHeader.getMcssh().start();
             NetWorkHeader.getServer().start();
 
             new Thread(() -> {

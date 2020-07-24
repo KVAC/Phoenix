@@ -10,7 +10,6 @@ import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent.TYPE;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.MessageRequest;
-import com.github.kvac.phoenix.libs.objects.events.ra.request.RSearchCS;
 import com.j256.ormlite.logger.LocalLog;
 import com.j256.ormlite.logger.Log.Level;
 import java.io.BufferedReader;
@@ -32,7 +31,6 @@ public class ClientInit {
         System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, Level.INFO.toString());
 
         NetWorkHeader netWorkHeader = new NetWorkHeader();
-        netWorkHeader.getClass();
 
         DataBaseHeader.getDataBase().connect();// YED 28.03.2020
         DataBaseHeader.getDataBase().createDB();// YED 28.03.2020

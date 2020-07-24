@@ -12,7 +12,6 @@ public class InitUtils {
     public static boolean checkSettingsAv() throws SQLException {
         String msg = "getSettingsDao:" + DataBaseHeader.getDataBase().getSettingsDao().countOf()
                 + ":getServerDao:" + DataBaseHeader.getDataBase().getServerDao().countOf();
-        //
         logger.info(msg);
 
         if (DataBaseHeader.getDataBase().getSettingsDao().countOf() == 0) {

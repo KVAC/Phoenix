@@ -35,9 +35,7 @@ public class NetWorkHandler extends Thread implements Runnable {
     private static void getAnswerForSearchCS(RSearchCS rSearchCS) {
         Thread.currentThread().setName(Thread.currentThread().getName() + ":GetAnswerForSearchCS");
         Dao<CS, String> csdao = DataBaseHeader.getDataBase().getCsDao();
-
         try {
-
             Where<CS, String> q = csdao.queryBuilder().where().like("name", "%" + rSearchCS.getRequestData() + "%");
             PreparedQuery<CS> aw = q.prepare();
             List<CS> list = csdao.query(aw);

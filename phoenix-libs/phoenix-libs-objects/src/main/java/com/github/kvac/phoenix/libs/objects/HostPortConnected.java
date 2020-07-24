@@ -5,8 +5,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.mina.core.session.IoSession;
 
 public class HostPortConnected {
+
+    @Getter
+    @Setter
+    private IoSession session;
 
     @Override
     public int hashCode() {

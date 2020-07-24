@@ -7,6 +7,7 @@ package com.github.kvac.phoenix.libs.objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.mina.core.session.IoSession;
 
 /**
  *

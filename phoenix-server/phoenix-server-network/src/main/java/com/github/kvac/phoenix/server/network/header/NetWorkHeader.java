@@ -1,6 +1,7 @@
-package com.github.kvac.phoenix.server.network;
+package com.github.kvac.phoenix.server.network.header;
 
 import com.github.kvac.phoenix.libs.objects.cs.CS;
+import com.github.kvac.phoenix.server.network.handler.MinaCSSessionHandler;
 import com.github.kvac.phoenix.server.network.handler.NetWorkHandler;
 import com.github.kvac.phoenix.server.network.server.Server;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +14,14 @@ public class NetWorkHeader {
     @Getter
     @Setter
     private static NetWorkHandler netWorkHandler = new NetWorkHandler();
+
+    @Getter
+    @Setter
+    private static MinaCSSessionHandler mcssh = new MinaCSSessionHandler();
+
+    @Getter
+    @Setter
+    private static int serverport = 9123;
 
     @Getter
     @Setter
