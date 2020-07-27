@@ -15,6 +15,7 @@ import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
 import org.slf4j.Logger;
@@ -37,12 +38,15 @@ public class ClientHandler extends Thread implements Runnable {
     public void run() {
         minaMethodRun();
     }
+    @Getter
+    @Setter
+    private boolean loggerUse = false;
 
     private void minaMethodRun() {
         if (minaMethod) {
-            NetWorkHeader.getConnector().getFilterChain().addLast("logger", new LoggingFilter());
-            //   this.connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
-
+            if (loggerUse) {
+                NetWorkHeader.getConnector().getFilterChain().addLast("logger", new LoggingFilter());
+            }
             ObjectSerializationCodecFactory objectSerializationCodecFactory = new ObjectSerializationCodecFactory();
             objectSerializationCodecFactory.setDecoderMaxObjectSize(Integer.MAX_VALUE);
             objectSerializationCodecFactory.setEncoderMaxObjectSize(Integer.MAX_VALUE);

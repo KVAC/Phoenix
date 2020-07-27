@@ -22,6 +22,10 @@ public class Server extends Thread implements Runnable {
     @Setter
     private boolean stop = false;
 
+    @Getter
+    @Setter
+    private boolean loggerUse = false;
+
     public Server() {
 
     }
@@ -30,15 +34,14 @@ public class Server extends Thread implements Runnable {
     public void run() {
         try {
             NioSocketAcceptor acceptor = new NioSocketAcceptor();
-            acceptor.getFilterChain().addLast("logger", new LoggingFilter());
-
+            if (loggerUse) {
+                acceptor.getFilterChain().addLast("logger", new LoggingFilter());
+            }
             ObjectSerializationCodecFactory objectSerializationCodecFactory = new ObjectSerializationCodecFactory();
             objectSerializationCodecFactory.setDecoderMaxObjectSize(Integer.MAX_VALUE);
             objectSerializationCodecFactory.setEncoderMaxObjectSize(Integer.MAX_VALUE);
 
             acceptor.getFilterChain().addLast("codec-Serializable", new ProtocolCodecFilter(objectSerializationCodecFactory));
-            //acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
-
             acceptor.setHandler(new MinaServerHandler());
 
             acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
