@@ -1,5 +1,10 @@
 package com.github.kvac.phoenix.endpoint.client.network;
 
+import com.github.kvac.phoenix.libs.objects.Auth;
+import com.github.kvac.phoenix.libs.objects.events.ra.request.AuthRequest;
+import com.github.kvac.phoenix.libs.objects.events.ra.request.Request;
+import java.util.Iterator;
+import java.util.Set;
 import lombok.Getter;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
@@ -37,9 +42,19 @@ public class MinaClientHandler extends IoHandlerAdapter {
 
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
-        System.out.println("client.ClientHandler.messageReceived()");
-        System.out.println(message.toString());
-        super.messageReceived(session, message); //To change body of generated methods, choose Tools | Templates.
+        loggerJ.info("messageReceived");
+        if (message instanceof Request) {
+            Request request = (Request) message;
+            if (request instanceof AuthRequest) {
+                AuthRequest authRequest = (AuthRequest) request;
+                Auth auth = new Auth();
+                auth.setWho(NetWorkHeader.getMycs());
+                session.write(auth);
+            }
+        } else {
+            System.out.println(message.toString());
+        }
+
     }
 
     @Override

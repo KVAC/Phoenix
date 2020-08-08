@@ -16,11 +16,11 @@ import phoenixendpointclient.phoenix.endpoint.client.events.ClientEventHEADER;
 
 public class DataBaseHandler extends Thread implements Runnable {
 
-    DataBaseHandler ThisHandler = this;
+    DataBaseHandler thisHandler = this;
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(DataBaseHandler.class);
 
     public DataBaseHandler() {
-        EventHEADER.getMESSAGES_EVENT_BUS().register(ThisHandler);
+        EventHEADER.getMESSAGES_EVENT_BUS().register(thisHandler);
         logger.info(this.getClass().getName() + " is registered");
     }
 
@@ -54,7 +54,7 @@ public class DataBaseHandler extends Thread implements Runnable {
         new Thread(() -> {
             do {
                 try {
-                    List<CS> list = DataBaseHeader.getDataBase().getCSDao().queryForAll();
+                    List<CS> list = DataBaseHeader.getDataBase().getCsDao().queryForAll();
                     for (CS cs : list) {
                         MyEvent event = new MyEvent();
                         event.setType(MyEvent.TYPE.CS_SHOW);

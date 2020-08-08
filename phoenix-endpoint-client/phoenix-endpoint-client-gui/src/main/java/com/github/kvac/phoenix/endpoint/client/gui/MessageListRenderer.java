@@ -18,11 +18,11 @@ public class MessageListRenderer extends JLabel implements ListCellRenderer<Mess
 
     @Getter
     @Setter
-    ClientGui parent;
+    ClientGui parentL;
     private static final long serialVersionUID = 1L;
 
     MessageListRenderer(ClientGui cg) {
-        setParent(cg);
+        setParentL(cg);
     }
 
     @Override

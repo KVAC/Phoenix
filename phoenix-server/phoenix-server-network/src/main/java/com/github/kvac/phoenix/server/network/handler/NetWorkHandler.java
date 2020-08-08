@@ -1,6 +1,7 @@
 package com.github.kvac.phoenix.server.network.handler;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.libs.objects.PhoenixObject;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.RSearchCS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.Request;
@@ -34,7 +35,7 @@ public class NetWorkHandler extends Thread implements Runnable {
 
     private static void getAnswerForSearchCS(RSearchCS rSearchCS) {
         Thread.currentThread().setName(Thread.currentThread().getName() + ":GetAnswerForSearchCS");
-        Dao<CS, String> csdao = DataBaseHeader.getDataBase().getCsDao();
+        Dao<CS, String> csdao = DataBaseHeader.getDataBase().getСsDao();
         try {
             Where<CS, String> q = csdao.queryBuilder().where().like("name", "%" + rSearchCS.getRequestData() + "%");
             PreparedQuery<CS> aw = q.prepare();
@@ -45,7 +46,8 @@ public class NetWorkHandler extends Thread implements Runnable {
             answer.setWho(rSearchCS.getWho());
 
             answer.setItAnswere(true);
-            answer.setAnswereData(list);
+            //FIXME CAST
+            answer.setAnswereData((PhoenixObject) list);
 
             EventHEADER.getSERVERS_ANSWER_BUS().post(answer);
         } catch (Exception e) {

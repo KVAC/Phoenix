@@ -184,7 +184,6 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
         this.jlist_Contact.updateUI();
     }//GEN-LAST:event_refresh_contact
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextField TextField_message;
     private javax.swing.JButton jButton1;
@@ -265,7 +264,7 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
                 csListModel.addElement(cs);
             } else {
                 for (int i = 0; i < csListModel.size(); i++) {
-                    if (cs.getID().equals(csListModel.get(i).getID())) {
+                    if (cs.getId().equals(csListModel.get(i).getId())) {
                         if (cs.getNameTime() > csListModel.get(i).getNameTime()) {
                             csListModel.set(i, cs);
                         }
@@ -277,9 +276,9 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
     }
 
     private boolean checkContainsCSInListModel(DefaultListModel<CS> listModel2, CS cs) {
-        String id = cs.getID();
+        String id = cs.getId();
         for (int i = 0; i < listModel2.size(); i++) {
-            if (listModel2.get(i).getID().equals(id)) {
+            if (listModel2.get(i).getId().equals(id)) {
                 return true;
             }
         }
@@ -294,9 +293,9 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
             if (messageEvent.getObject() instanceof Message) {
 
                 Message message = (Message) messageEvent.getObject();
-                String myid = NetWorkHeader.getMycs().getID().toLowerCase();
-                String fromid = message.getFrom().getID().toLowerCase();
-                String toid = message.getTo().getID().toLowerCase();
+                String myid = NetWorkHeader.getMycs().getId().toLowerCase();
+                String fromid = message.getFrom().getId().toLowerCase();
+                String toid = message.getTo().getId().toLowerCase();
 
                 if (myid.equals(fromid) || myid.equals(toid)) {
                     addMessageMY(message);
@@ -309,33 +308,33 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
     // Message
     @Getter
     @Setter
-    private String selected_LAst = null;
+    private String selectedLAst = null;
 
     @Getter
     @Setter
-    private String selected_cur = null;
+    private String selectedCur = null;
 
     public void addMessageMY(Message message) {
         if (getJlist_Contact().getSelectedValuesList().size() == 1) {
             CS Selected = getJlist_Contact().getSelectedValue();
             // Сообщения для выделенного контакта
-            if (message.getTo().getID().equals(Selected.getID()) || message.getFrom().getID().equals(Selected.getID())) {
-                selected_cur = Selected.getID();
+            if (message.getTo().getId().equals(Selected.getId()) || message.getFrom().getId().equals(Selected.getId())) {
+                selectedCur = Selected.getId();
                 // первое выделение
-                if (selected_LAst == null) {
-                    selected_LAst = selected_cur;
+                if (selectedLAst == null) {
+                    selectedLAst = selectedCur;
                     MessageShow(Selected, message);
                 } // первое выделение
                 // Смена контакта
-                else if (!selected_LAst.equals(selected_cur)) {
+                else if (!selectedLAst.equals(selectedCur)) {
                     messageListModel.removeAllElements();
                     MessageShow(Selected, message);
-                    selected_LAst = selected_cur;
+                    selectedLAst = selectedCur;
                 } // Смена контакта
                 // выбор не изменен
-                else if (selected_LAst.equals(selected_cur)) {
+                else if (selectedLAst.equals(selectedCur)) {
                     MessageShow(Selected, message);
-                    selected_LAst = selected_cur;
+                    selectedLAst = selectedCur;
                 }
                 // выбор не изменен
             }
@@ -343,8 +342,8 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
     }
 
     public void MessageShow(CS selected, Message message) {
-        if (message.getTo().getID().equals(selected.getID()) || message.getFrom().getID().equals(selected.getID())) {
-            if (message.getTo().getID().equals(NetWorkHeader.getMycs().getID()) || message.getFrom().getID().equals(NetWorkHeader.getMycs().getID())) {
+        if (message.getTo().getId().equals(selected.getId()) || message.getFrom().getId().equals(selected.getId())) {
+            if (message.getTo().getId().equals(NetWorkHeader.getMycs().getId()) || message.getFrom().getId().equals(NetWorkHeader.getMycs().getId())) {
                 if (!checkContainsMessageInListModel(messageListModel, message)) {
                     messageListModel.addElement(message);
                 }

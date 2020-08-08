@@ -1,11 +1,8 @@
 package com.github.kvac.phoenix.endpoint.client.network;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
-
 public class NetWorkD extends Thread implements Runnable {
 
     public NetWorkD() {
-        EventHEADER.getBus_cs_clear().register(this);
     }
 
     @Override
@@ -15,14 +12,14 @@ public class NetWorkD extends Thread implements Runnable {
             Thread.currentThread().setName("NetWorkD.PING");
             do {
                 NetWorkHeader.getConnector().broadcast(NetWorkHeader.PING);
+                System.out.println(Long.MAX_VALUE);
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             } while (true);
-        }).start();
+        }, "broadcast:ping").start();
         // PING
-
     }
 }

@@ -11,7 +11,7 @@
     <artifactId>phoenix-endpoint-client-network</artifactId>
 
     <dependencies>
-            
+
         <!-- EVENTS -->
         <dependency>
             <groupId>phoenix-endpoint-client</groupId>
@@ -19,23 +19,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- EVENTS -->
-            
-        <dependency>
-            <groupId>phoenix-libs-events</groupId>
-            <artifactId>phoenix-libs-events</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>phoenix-libs</groupId>
-            <artifactId>phoenix-libs-objects</artifactId>
+            <artifactId>phoenix-libs</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>phoenix-libs-network</groupId>
-            <artifactId>phoenix-libs-network</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>phoenix-endpoint-client</groupId>
             <artifactId>phoenix-endpoint-client-db</artifactId>

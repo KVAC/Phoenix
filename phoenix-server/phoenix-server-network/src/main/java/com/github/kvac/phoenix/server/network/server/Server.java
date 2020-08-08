@@ -42,7 +42,7 @@ public class Server extends Thread implements Runnable {
             objectSerializationCodecFactory.setEncoderMaxObjectSize(Integer.MAX_VALUE);
 
             acceptor.getFilterChain().addLast("codec-Serializable", new ProtocolCodecFilter(objectSerializationCodecFactory));
-            acceptor.setHandler(new MinaServerHandler());
+            acceptor.setHandler(NetWorkHeader.getMinaServerHandler());
 
             acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
             acceptor.bind(new InetSocketAddress(NetWorkHeader.getServerport()));

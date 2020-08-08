@@ -27,18 +27,20 @@ import phoenixendpointclient.phoenix.endpoint.client.events.ClientEventHEADER;
  */
 public class SearchCS extends javax.swing.JFrame implements WindowListener {
 
+    private static final long serialVersionUID = 240513231950251807L;
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    SearchCS ThisThis = this;
+    SearchCS thisThis = this;
 
     /**
      * Creates new form SearchCS
      */
     public SearchCS() {
-        this.addWindowListener(ThisThis);
+        this.addWindowListener(thisThis);
         initComponents();
     }
-    CopyOnWriteArrayList<CS> selected = new CopyOnWriteArrayList<CS>();
+    private final CopyOnWriteArrayList<CS> selected = new CopyOnWriteArrayList<CS>();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,7 +73,7 @@ public class SearchCS extends javax.swing.JFrame implements WindowListener {
         });
 
         jList1.setModel(GuiHEADER.getListModel());
-        jList1.setCellRenderer(new SearchListRenderer(ThisThis));
+        jList1.setCellRenderer(new SearchListRenderer(thisThis));
         jScrollPane1.setViewportView(jList1);
 
         jButton_add_finded.setText("Добавить веделенные");
@@ -126,7 +128,7 @@ public class SearchCS extends javax.swing.JFrame implements WindowListener {
             rscs.setWho(NetWorkHeader.getMycs());
 
             event.setObject(rscs);
-            event.setType(MyEvent.TYPE.CS_SearchR);
+            event.setType(MyEvent.TYPE.CS_SEARCHR);
 
             EventHEADER.getSERVERS_REQUEST_BUS().post(event);
         } else {

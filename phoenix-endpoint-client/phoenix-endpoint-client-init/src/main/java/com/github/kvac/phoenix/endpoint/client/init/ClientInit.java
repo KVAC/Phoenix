@@ -5,7 +5,6 @@ import com.github.kvac.phoenix.endpoint.client.gui.ClientGui;
 import com.github.kvac.phoenix.endpoint.client.gui.First_Settings;
 import com.github.kvac.phoenix.endpoint.client.network.NetWorkHeader;
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
-import com.github.kvac.phoenix.libs.objects.Ping;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent.TYPE;
@@ -47,7 +46,7 @@ public class ClientInit {
             } catch (InterruptedException e) {
                 logger.error(e.toString());
             }
-            first_Settings.getTextArea1().setText(first_Settings.getTextArea1().getText().replaceAll(" ", ""));
+            first_Settings.getTextArea1().setText(first_Settings.getTextArea1().getText().replaceAll("\\s", ""));
             while (!InitUtils.checkSettingsAv()) {
                 //
                 //
@@ -65,9 +64,7 @@ public class ClientInit {
         // Начальные сервера
         // первоначальная настройка
 
-        // DataBaseHeader.getDataBase().createDefault();// YED 28.03.2020
-        DataBaseHeader.getDataBase().restoreInfo();// YED 28.03.2020
-
+        DataBaseHeader.getDataBase().restoreInfo();
         DataBaseHeader.getDataBaseHandler().start();
 
         NetWorkHeader.getNetWorkD().start();
@@ -88,20 +85,6 @@ public class ClientInit {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     logger.error(Thread.currentThread().getName(), e);
-                }
-            } while (true);
-        }).start();
-
-        new Thread(() -> {
-            Thread.currentThread().setName("Client Ping");
-            Ping ping = new Ping();
-            do {
-                EventHEADER.getBus_Ping().post(ping);
-                //       logger.info("count:" + NetWorkHeader.getHostPortConnectedList().size());
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
                 }
             } while (true);
         }).start();
@@ -132,16 +115,15 @@ public class ClientInit {
         }, "MessageGetterNet").start();
     }
 
-    public static void getExternalIpAdress() throws IOException {
+    public static String getExternalIpAdress() throws IOException {
         URL whatismyip = new URL("http://checkip.amazonaws.com");
         BufferedReader in;
-        try (InputStream stream = whatismyip.openStream()) {
-            InputStreamReader isr = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        try (InputStream stream = whatismyip.openStream(); InputStreamReader isr = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
             in = new BufferedReader(isr);
             in.close();
-            isr.close();
         }
         String ip = in.readLine();
-        System.out.println(ip);
+        logger.info(":ip:" + ip);
+        return ip;
     }
 }

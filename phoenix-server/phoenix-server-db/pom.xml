@@ -13,15 +13,10 @@
     <dependencies>
         <dependency>
             <groupId>phoenix-libs</groupId>
-            <artifactId>phoenix-libs-objects</artifactId>
+            <artifactId>phoenix-libs</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>phoenix-libs-events</groupId>
-            <artifactId>phoenix-libs-events</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-                
-                
+
+
     </dependencies>
 </project>

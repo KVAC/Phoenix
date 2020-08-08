@@ -17,14 +17,14 @@ import org.slf4j.LoggerFactory;
 public class CSListRenderer extends JLabel implements ListCellRenderer<CS> {
 
     protected static final Logger logger = LoggerFactory.getLogger(CSListRenderer.class);
-
     private static final long serialVersionUID = 1L;
+
     @Getter
     @Setter
-    private ClientGui parent;
+    private ClientGui parentL;
 
     public CSListRenderer(ClientGui clientGui) {
-        setParent(clientGui);
+        setParentL(clientGui);
     }
 
     @Override
@@ -33,10 +33,10 @@ public class CSListRenderer extends JLabel implements ListCellRenderer<CS> {
         try {
             setText(cs.getName());
             if (isSelected) {
-                if (getParent() != null) {
-                    if (getParent().getSelected_LAst() != null && getParent().messageListModel != null) {
-                        if (getParent().getSelected_LAst().equals(cs.getID())) {
-                            getParent().messageListModel.removeAllElements();
+                if (getParentL() != null) {
+                    if (getParentL().getSelectedLAst() != null && getParentL().messageListModel != null) {
+                        if (getParentL().getSelectedLAst().equals(cs.getId())) {
+                            getParentL().messageListModel.removeAllElements();
                         }
                     }
                 }
@@ -46,14 +46,14 @@ public class CSListRenderer extends JLabel implements ListCellRenderer<CS> {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
-            if (getParent().getJlist_Contact().getSelectedValuesList().size() != 1) {
-                getParent().getTextField_message().setEditable(false);
-                getParent().getJButton_send().setEnabled(false);
-                getParent().getJlist_Messages().setEnabled(false);
+            if (getParentL().getJlist_Contact().getSelectedValuesList().size() != 1) {
+                getParentL().getTextField_message().setEditable(false);
+                getParentL().getJButton_send().setEnabled(false);
+                getParentL().getJlist_Messages().setEnabled(false);
             } else {
-                getParent().getTextField_message().setEditable(true);
-                getParent().getJButton_send().setEnabled(true);
-                getParent().getJlist_Messages().setEnabled(true);
+                getParentL().getTextField_message().setEditable(true);
+                getParentL().getJButton_send().setEnabled(true);
+                getParentL().getJlist_Messages().setEnabled(true);
             }
         } catch (Exception e) {
             logger.error("", e);

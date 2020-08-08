@@ -1,9 +1,8 @@
 package com.github.kvac.phoenix.endpoint.client.network;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
-import com.github.kvac.phoenix.libs.objects.HostPortConnected;
+import com.github.kvac.phoenix.libs.network.Ping;
 import com.github.kvac.phoenix.libs.objects.MySettings;
-import com.github.kvac.phoenix.libs.objects.Ping;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent;
 import com.google.common.eventbus.Subscribe;
@@ -12,9 +11,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
+import com.github.kvac.phoenix.libs.network.HostPortConnected;
+
 public class NetWorkHeader {
 
-    public static final Ping PING = new Ping();
+    public static final Ping PING = new Ping("ping");
 
     @Getter
     @Setter
@@ -33,7 +34,6 @@ public class NetWorkHeader {
 
     {
         EventHEADER.getBus_mysettings().register(this);
-        //    mycs.setItsMe(true);
     }
 
     @Getter
@@ -47,7 +47,7 @@ public class NetWorkHeader {
             MySettings settings = (MySettings) event.getObject();
 
             if (settings.getMyID() != null) {
-                mycs.setID(settings.getMyID());
+                mycs.setId(settings.getMyID());
             }
             if (settings.getName() != null) {
                 if (settings.getNameTime() > mycs.getNameTime()) {

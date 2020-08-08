@@ -21,8 +21,8 @@
         <sqlite-jdbc.version>3.32.3.1</sqlite-jdbc.version>
     </properties>
     <modules>
-        <module>phoenix-endpoint-client</module>
         <module>phoenix-libs</module>
+        <module>phoenix-endpoint-client</module>
         <module>phoenix-server</module>
     </modules>
 

@@ -21,11 +21,6 @@
 
         <!-- NETWORK -->
         <dependency>
-            <groupId>phoenix-libs-network</groupId>
-            <artifactId>phoenix-libs-network</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>phoenix-endpoint-client-network</groupId>
             <artifactId>phoenix-endpoint-client-network</artifactId>
             <version>0.0.1-SNAPSHOT</version>

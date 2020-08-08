@@ -5,7 +5,7 @@
  */
 package com.github.kvac.phoenix.server.network.handler;
 
-import com.github.kvac.phoenix.libs.objects.HostPortConnected;
+import com.github.kvac.phoenix.libs.network.HostPortConnected;
 import java.util.Map;
 import org.apache.mina.core.session.IoSession;
 import java.util.concurrent.ConcurrentHashMap;

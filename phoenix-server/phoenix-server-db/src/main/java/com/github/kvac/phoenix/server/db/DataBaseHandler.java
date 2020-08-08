@@ -39,7 +39,7 @@ public class DataBaseHandler extends Thread implements Runnable {
     public void myEventHandler(MyEvent event) throws SQLException {
         MyEvent.TYPE type = event.getType();
         Object object = event.getObject();
-        if ((type.equals(MyEvent.TYPE.Database_CS_SAVE))
+        if ((type.equals(MyEvent.TYPE.DATABASE_CS_SAVE))
                 && object instanceof CS) {
             DataBaseHeader.getDataBase().saveCS((CS) object);
         }

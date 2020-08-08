@@ -1,10 +1,12 @@
 package com.github.kvac.phoenix.server.network.server;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.libs.network.Ping;
 import com.github.kvac.phoenix.libs.objects.Auth;
 import com.github.kvac.phoenix.libs.objects.Message;
-import com.github.kvac.phoenix.libs.objects.Ping;
+import com.github.kvac.phoenix.libs.objects.PhoenixObject;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
+import com.github.kvac.phoenix.libs.objects.events.ra.request.AuthRequest;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.MessageRequest;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.RSearchCS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.Request;
@@ -30,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MinaServerHandler extends IoHandlerAdapter {
 
-    static final String cs_attr = "CS:";
+    static final String CS_ATTR = "CS:";
 
     //FOR SESSION
     private void register() {
@@ -71,16 +73,17 @@ public class MinaServerHandler extends IoHandlerAdapter {
 
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
+        loggerJ.info("messageReceived");
         if (message instanceof Auth) {
             Auth auth = (Auth) message;
             // setClientCS(auth.getWho());
             try {
                 CS cs = auth.getWho();
-                Object cur_attr = session.getAttribute(cs_attr);
+                Object cur_attr = session.getAttribute(CS_ATTR);
                 if (cur_attr == null) {
-                    session.setAttribute(cs_attr, cs);
+                    session.setAttribute(CS_ATTR, cs);
                 }
-                getLoggerJ().info("AUTH  completed*");
+                getLoggerJ().info(session.getRemoteAddress() + ":AUTH  completed*");
             } catch (Exception e) {
                 getLoggerJ().error("AUTH", e);
             }
@@ -105,10 +108,11 @@ public class MinaServerHandler extends IoHandlerAdapter {
                     CS who = messageRequest.getWho();
                     Dao<Message, String> messageDao = DataBaseHeader.getDataBase().getMessageDao();
                     QueryBuilder<Message, String> queryBuilder = messageDao.queryBuilder();
-                    List<Message> answ = queryBuilder.where().eq("From_id", who.getID()).or().eq("To_id", who.getID()).query();
+                    List<Message> answ = queryBuilder.where().eq("From_id", who.getId()).or().eq("To_id", who.getId()).query();
                     MessageRequest answer = new MessageRequest();
                     answer.setItAnswere(true);
-                    answer.setAnswereData(answ);
+                    //FIXME CAST
+                    answer.setAnswereData((PhoenixObject) answ);
                     session.write(answer);
                 } catch (SQLException e) {
                     getLoggerJ().error("MessageRequest:", e);
@@ -132,7 +136,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
-        super.exceptionCaught(session, cause);
+        loggerJ.error("ERROR:", cause);
+        //   super.exceptionCaught(session, cause);
     }
 
     @Override
@@ -147,20 +152,21 @@ public class MinaServerHandler extends IoHandlerAdapter {
 
     @Override
     public void sessionOpened(IoSession session) throws Exception {
-        getLoggerJ().info("2");
-        CS cs = null;
-
+        getLoggerJ().info("sessionOpened");
         session.getConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
 
-        if (!session.containsAttribute(cs_attr)) {
-            session.setAttribute(cs_attr, cs);
+        //AUTH HERE
+        CS cs = null;
+        if (!session.containsAttribute(CS_ATTR)) {
+            session.setAttribute(CS_ATTR, cs);
         }
-        System.out.println(session.getAttribute(cs_attr));
+        AuthRequest authRequest = new AuthRequest();
+        session.write(authRequest);
     }
 
     @Override
     public void sessionCreated(IoSession session) throws Exception {
-        getLoggerJ().info("1");
+        getLoggerJ().info("sessionCreated");
     }
 
 }

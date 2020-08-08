@@ -32,17 +32,16 @@ import org.slf4j.LoggerFactory;
 public class Database {
 
     protected static final Logger logger = LoggerFactory.getLogger(Database.class);
-
     DataSourceConnectionSource connectionSource;
     @Getter
-    Dao<CS, String> CsDao;
+    Dao<CS, String> сsDao;
     @Getter
-    Dao<S, String> ServerDao;
+    Dao<S, String> serverDao;
     @Getter
     @Setter
     private Dao<Message, String> messageDao;
 
-    public static void init() throws JsonGenerationException, JsonMappingException, IOException {
+    public void init() throws JsonGenerationException, JsonMappingException, IOException {
         ServerConfig config = new ServerConfig();
 
         String serverDB_host;
@@ -98,8 +97,8 @@ public class Database {
 
     public void connect() throws SQLException {
         this.connectionSource = new DataSourceConnectionSource(createDataSource(), DataBaseHeader.dbPATH);
-        this.CsDao = DaoManager.createDao(connectionSource, CS.class);
-        this.ServerDao = DaoManager.createDao(connectionSource, S.class);
+        this.сsDao = DaoManager.createDao(connectionSource, CS.class);
+        this.serverDao = DaoManager.createDao(connectionSource, S.class);
         this.messageDao = DaoManager.createDao(this.connectionSource, Message.class);
     }
 
@@ -110,8 +109,8 @@ public class Database {
     }
 
     public void saveCS(CS cs) throws SQLException {
-        if (!CsDao.idExists(cs.getID())) {
-            CsDao.createOrUpdate(cs);
+        if (!сsDao.idExists(cs.getId())) {
+            сsDao.createOrUpdate(cs);
             logger.info("CS:" + cs.getName() + " is saved");
         }
     }

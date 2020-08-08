@@ -1,9 +1,10 @@
 package com.github.kvac.phoenix.server.init;
 
 import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
-import com.github.kvac.phoenix.libs.objects.Ping;
+import com.github.kvac.phoenix.libs.network.Ping;
 import com.github.kvac.phoenix.server.db.DataBaseHeader;
 import com.github.kvac.phoenix.server.network.header.NetWorkHeader;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import org.slf4j.LoggerFactory;
@@ -29,11 +30,10 @@ public class ServerInit {
             DataBaseHeader.getDataBase().create();
             DataBaseHeader.getDataBaseHandler().start();
 
-            NetWorkHeader.getMcssh().start();
+            NetWorkHeader.getMcssh().start();//MinaCSSessionHandler
             NetWorkHeader.getServer().start();
 
             new Thread(() -> {
-                Thread.currentThread().setName("SERVER_PONG");
                 Ping pong = new Ping();
                 do {
                     EventHEADER.getBus_Pong().post(pong);
@@ -43,7 +43,7 @@ public class ServerInit {
                         logger.warn("", ex);
                     }
                 } while (true);
-            }).start();
+            }, "SERVER_PONG").start();
         } catch (SQLException | IOException ex) {
             logger.warn("", ex);
         }
