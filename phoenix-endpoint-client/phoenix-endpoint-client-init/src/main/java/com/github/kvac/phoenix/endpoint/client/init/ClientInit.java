@@ -30,7 +30,7 @@ public class ClientInit {
         System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, Level.INFO.toString());
 
         NetWorkHeader netWorkHeader = new NetWorkHeader();
-
+        netWorkHeader.getClass();//TODO
         DataBaseHeader.getDataBase().connect();// YED 28.03.2020
         DataBaseHeader.getDataBase().createDB();// YED 28.03.2020
 

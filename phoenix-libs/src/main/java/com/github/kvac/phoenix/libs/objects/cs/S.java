@@ -27,6 +27,10 @@ public class S {
         try {
             String host = StringUtils.substringBefore(server, ":");
             int port = Integer.parseInt(StringUtils.substringAfter(server, ":"));
+            if (port >= 0 && port <= 65535) {
+                host.getClass();//TODO
+                return true;
+            }
         } catch (NumberFormatException e) {
             return false;
         }

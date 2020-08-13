@@ -17,20 +17,12 @@ public class NetWorkHandler extends Thread implements Runnable {
 
     protected static final Logger logger = LoggerFactory.getLogger(NetWorkHandler.class);
 
-    public static void handleOtherObject(Object object) {
-
-    }
-
-    public NetWorkHandler() {
-    }
-
     public static void getAnswerForRequest(Request request) {
         new Thread(() -> {
             if (request instanceof RSearchCS) {
                 getAnswerForSearchCS((RSearchCS) request);
             }
         }, "GetAnswerForRequest").start();
-
     }
 
     private static void getAnswerForSearchCS(RSearchCS rSearchCS) {
@@ -47,12 +39,16 @@ public class NetWorkHandler extends Thread implements Runnable {
 
             answer.setItAnswere(true);
             //FIXME CAST
-            answer.setAnswereData((PhoenixObject) list);
+            answer.getAnswereData().add(list);
 
             EventHEADER.getSERVERS_ANSWER_BUS().post(answer);
         } catch (Exception e) {
             logger.error("", e);
         }
+    }
+
+    public static void handleOtherObject(Object message) {
+        logger.warn("OTHER OBJECT" + message);
     }
 
 }

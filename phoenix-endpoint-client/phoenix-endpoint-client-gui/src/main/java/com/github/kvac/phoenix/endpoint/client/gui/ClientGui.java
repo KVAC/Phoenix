@@ -161,11 +161,13 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        evt.getClass();
         SearchCS searchCS = new SearchCS();
         searchCS.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void message_send(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_message_send
+        evt.getClass();
         Message message = new Message();
         message.setFrom(NetWorkHeader.getMycs());
         message.setTo(getJlist_Contact().getSelectedValue());
@@ -179,6 +181,7 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
     }//GEN-LAST:event_message_send
 
     private void refresh_contact(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refresh_contact
+        evt.getClass();
         this.csListModel.removeAllElements();
         this.jlist_Contact.repaint();
         this.jlist_Contact.updateUI();
@@ -221,38 +224,37 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
 
     @Override
     public void windowOpened(WindowEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowOpened()");
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        System.out.println("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowClosing()");
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowClosing()");
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowClosed()");
     }
 
     @Override
     public void windowIconified(WindowEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowIconified()");
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowDeiconified()");
     }
 
     @Override
     public void windowActivated(WindowEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowActivated()");
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("com.github.kvac.phoenix.endpoint.client.gui.ClientGui.windowDeactivated()");
     }
 
     @Subscribe
@@ -300,7 +302,7 @@ public class ClientGui extends javax.swing.JFrame implements WindowListener {
                 if (myid.equals(fromid) || myid.equals(toid)) {
                     addMessageMY(message);
                 } else {
-                    System.out.println(System.currentTimeMillis() / 1000 + ":FOR OTHER:" + typem + " message:" + message);
+                    logger.info(System.currentTimeMillis() / 1000 + ":FOR OTHER:" + typem + " message:" + message);
                 }
             }
         }

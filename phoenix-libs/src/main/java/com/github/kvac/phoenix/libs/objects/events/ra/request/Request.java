@@ -6,6 +6,7 @@
 package com.github.kvac.phoenix.libs.objects.events.ra.request;
 
 import com.github.kvac.phoenix.libs.objects.PhoenixObject;
+import com.github.kvac.phoenix.libs.objects.SerializableArrayList;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import java.io.Serializable;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import lombok.Setter;
  *
  * @author jdcs_dev
  */
-public class Request implements Serializable {
+public class Request extends PhoenixObject implements Serializable {
 
     private static final long serialVersionUID = 240513231950251807L;
 
@@ -29,7 +30,7 @@ public class Request implements Serializable {
 
     @Getter
     @Setter
-    private Object requestData;
+    private SerializableArrayList requestData = new SerializableArrayList();
 
     //
     //#######################################
@@ -41,6 +42,6 @@ public class Request implements Serializable {
 
     @Getter
     @Setter
-    private PhoenixObject answereData;
+    private SerializableArrayList answereData = new SerializableArrayList();
     //#######################################
 }

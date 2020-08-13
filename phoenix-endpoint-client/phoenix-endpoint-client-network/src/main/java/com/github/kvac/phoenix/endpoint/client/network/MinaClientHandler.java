@@ -46,13 +46,14 @@ public class MinaClientHandler extends IoHandlerAdapter {
         if (message instanceof Request) {
             Request request = (Request) message;
             if (request instanceof AuthRequest) {
+                //TODO NO AUTH
                 AuthRequest authRequest = (AuthRequest) request;
                 Auth auth = new Auth();
                 auth.setWho(NetWorkHeader.getMycs());
                 session.write(auth);
             }
         } else {
-            System.out.println(message.toString());
+            loggerJ.info(message.toString());
         }
 
     }
@@ -67,7 +68,7 @@ public class MinaClientHandler extends IoHandlerAdapter {
         session.getConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
         String attr = "Values: ";
         session.setAttribute(attr);
-        System.out.println(session.getAttribute(attr));
+        loggerJ.info(session.getAttribute(attr).toString());
     }
 
     @Override
@@ -78,9 +79,6 @@ public class MinaClientHandler extends IoHandlerAdapter {
     @Override
     public void inputClosed(IoSession session) throws Exception {
         super.inputClosed(session); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public MinaClientHandler() {
     }
 
 }

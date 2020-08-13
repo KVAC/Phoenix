@@ -114,8 +114,8 @@ public class ClientHandler extends Thread implements Runnable {
     }
 
     @Subscribe
-    private static void requestHandle(Request request) {
-        System.err.println(request.getWho().getId());
+    private void requestHandle(Request request) {
+        loggerJ.info("req:" + request.getWho().getId());
     }
 
     @Subscribe

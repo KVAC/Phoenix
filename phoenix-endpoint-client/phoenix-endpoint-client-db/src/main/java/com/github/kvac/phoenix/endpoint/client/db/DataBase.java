@@ -118,7 +118,7 @@ public class DataBase {
         for (CS cs : arrayList) {
             cs_save(cs);
         }
-        System.err.println("DataBase.cs_save_ArrayList():" + arrayList.size());
+        logger.warn("DataBase.cs_save_ArrayList():" + arrayList.size());
     }
 
     public void restoreServers() {

@@ -23,10 +23,6 @@ public class MinaCSSessionHandler extends Thread implements Runnable {
 
     public static final ConcurrentHashMap<IoSession, HostPortConnected> SESSION_FOR_CS = new ConcurrentHashMap<>();
 
-    public MinaCSSessionHandler() {
-
-    }
-
     @Override
     public void run() {
         do {

@@ -90,7 +90,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
             //TODO
         } else if (message instanceof Ping) {
             Ping ping = (Ping) message;
-            System.out.println("message:" + ping.getMessage());
+            loggerJ.info("message:" + ping.getMessage());
         } else if (message instanceof CS) {
             CS cs = (CS) message;
             cs.save();
@@ -111,15 +111,15 @@ public class MinaServerHandler extends IoHandlerAdapter {
                     List<Message> answ = queryBuilder.where().eq("From_id", who.getId()).or().eq("To_id", who.getId()).query();
                     MessageRequest answer = new MessageRequest();
                     answer.setItAnswere(true);
-                    //FIXME CAST
-                    answer.setAnswereData((PhoenixObject) answ);
+                    //FIXME ARRAYLIST_s
+                    answer.getAnswereData().addAll(answ);
                     session.write(answer);
                 } catch (SQLException e) {
                     getLoggerJ().error("MessageRequest:", e);
                 }
             }
         } else {
-            System.out.println("message:" + message.getClass() + ":" + message.toString());
+            loggerJ.info("message:" + message.getClass() + ":" + message.toString());
             NetWorkHandler.handleOtherObject(message);
         }
     }
@@ -147,7 +147,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 
     @Override
     public void sessionClosed(IoSession session) throws Exception {
-
+        loggerJ.info("Session:" + session + " is clossed");
     }
 
     @Override

@@ -25,9 +25,9 @@ import org.slf4j.LoggerFactory;
 @Getter
 public class First_Settings extends javax.swing.JFrame {
 
-    protected static final Logger logger = LoggerFactory.getLogger(First_Settings.class);
+    transient protected static final Logger logger = LoggerFactory.getLogger(First_Settings.class);
 
-    ArrayList<S> serversList = new ArrayList<>();
+    transient ArrayList<S> serversList = new ArrayList<>();
 
     static final List<String> invalidStrings = new ArrayList<String>() {
         private static final long serialVersionUID = 1l;
@@ -188,7 +188,7 @@ public class First_Settings extends javax.swing.JFrame {
     private void nameChanged(java.awt.event.TextEvent evt) {//GEN-FIRST:event_nameChanged
         TextComponent tc = (TextComponent) evt.getSource();
         String text = tc.getText();
-        System.out.println(text);
+        logger.info(text);
         if (validName(text)) {
             checkbox_NameValid.setState(true);
         } else {
@@ -207,7 +207,7 @@ public class First_Settings extends javax.swing.JFrame {
         String[] serversStringSplited = text.split(",");
 
         for (String string : serversStringSplited) {
-            System.err.println(string);
+            logger.info(string);
 
             if (S.validServer(string)) {
                 S server = S.parseString(string);
@@ -266,7 +266,6 @@ public class First_Settings extends javax.swing.JFrame {
     public static boolean validName(String name) {
         return invalidStrings.stream().noneMatch((invalidString) -> (name.toLowerCase().contains(invalidString.toLowerCase())));
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Checkbox checkbox1;

@@ -68,13 +68,13 @@ public class Database {
             config.setServerDB_pass(serverDB_pass);
             config.setServerDB_DB(serverDB_DB);
             mapper.writeValue(configFile, config);
-            System.err.println("change values in " + configFile.getAbsolutePath());
+            logger.warn("change values in " + configFile.getAbsolutePath());
             Runtime.getRuntime().exit(0);
         }
 
         ServerConfig configR = mapper.readValue(configFile, ServerConfig.class);
 
-        System.out.println(ReflectionToStringBuilder.toString(configR, ToStringStyle.MULTI_LINE_STYLE));
+        logger.info(ReflectionToStringBuilder.toString(configR, ToStringStyle.MULTI_LINE_STYLE));
 
         DataBaseHeader.setConfig(configR);
 
@@ -82,11 +82,11 @@ public class Database {
         configStringBuilder.append("jdbc:postgresql://");
         configStringBuilder.append(DataBaseHeader.getConfig().getServerDB_host()).append("/").append(DataBaseHeader.getConfig().getServerDB_DB());
 
-        DataBaseHeader.dbPATH = configStringBuilder.toString();
+        DataBaseHeader.dbPATH.append(configStringBuilder.toString());
     }
 
     public static DataSource createDataSource() {
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(DataBaseHeader.dbPATH,
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(DataBaseHeader.dbPATH.toString(),
                 DataBaseHeader.getConfig().getServerDB_username(), DataBaseHeader.getConfig().getServerDB_pass());
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
         GenericObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<PoolableConnection>(
@@ -96,7 +96,7 @@ public class Database {
     }
 
     public void connect() throws SQLException {
-        this.connectionSource = new DataSourceConnectionSource(createDataSource(), DataBaseHeader.dbPATH);
+        this.connectionSource = new DataSourceConnectionSource(createDataSource(), DataBaseHeader.dbPATH.toString());
         this.сsDao = DaoManager.createDao(connectionSource, CS.class);
         this.serverDao = DaoManager.createDao(connectionSource, S.class);
         this.messageDao = DaoManager.createDao(this.connectionSource, Message.class);

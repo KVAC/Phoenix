@@ -29,7 +29,7 @@ public class SearchCS extends javax.swing.JFrame implements WindowListener {
 
     private static final long serialVersionUID = 240513231950251807L;
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    transient protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     SearchCS thisThis = this;
 
@@ -124,7 +124,8 @@ public class SearchCS extends javax.swing.JFrame implements WindowListener {
             MyEvent event = new MyEvent();
 
             RSearchCS rscs = new RSearchCS();
-            rscs.setRequestData(text);
+            //FIXME
+            rscs.getRequestData().add(text);
             rscs.setWho(NetWorkHeader.getMycs());
 
             event.setObject(rscs);
@@ -150,7 +151,7 @@ public class SearchCS extends javax.swing.JFrame implements WindowListener {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField JTextField_whatSearch;
     private javax.swing.JButton jButton_add_finded;
-    private static javax.swing.JList<CS> jList1;
+    private javax.swing.JList<CS> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
@@ -183,12 +184,12 @@ public class SearchCS extends javax.swing.JFrame implements WindowListener {
 
     @Override
     public void windowIconified(WindowEvent e) {
-        System.out.println(4);
+        logger.info(String.valueOf(4));
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-        System.out.println(5);
+        logger.info(String.valueOf(5));
     }
 
     private void unregister() {

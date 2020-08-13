@@ -1,6 +1,7 @@
 package com.github.kvac.phoenix.server.db;
 
 import com.github.kvac.phoenix.libs.objects.ServerConfig;
+import java.nio.charset.StandardCharsets;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,6 @@ public class DataBaseHeader {
     @Setter
     private static ServerConfig config = new ServerConfig();
 
-    static String dbPATH = "";
+    static StringBuilder dbPATH = new StringBuilder();
 
 }

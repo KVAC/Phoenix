@@ -22,11 +22,11 @@ public class Message extends PhoenixObject implements Serializable {
     public enum field {
         MESSAGE_ID,
         //
-        MESSAGE_From, MESSAGE_To,
+        MESSAGE_FROM, MESSAGE_TO,
         //
-        MESSAGE, MESSAGE_encrypted,
+        MESSAGE, MESSAGE_ENCRYPTED,
         //
-        MESSAGE_status
+        MESSAGE_STATUS
     }
 
     @Getter

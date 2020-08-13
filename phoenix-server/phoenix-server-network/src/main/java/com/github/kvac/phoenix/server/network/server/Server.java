@@ -26,10 +26,6 @@ public class Server extends Thread implements Runnable {
     @Setter
     private boolean loggerUse = false;
 
-    public Server() {
-
-    }
-
     @Override
     public void run() {
         try {

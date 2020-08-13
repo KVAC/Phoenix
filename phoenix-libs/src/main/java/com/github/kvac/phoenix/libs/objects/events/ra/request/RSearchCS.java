@@ -5,9 +5,12 @@
  */
 package com.github.kvac.phoenix.libs.objects.events.ra.request;
 
+import com.github.kvac.phoenix.libs.objects.PhoenixObject;
+
 /**
  *
  * @author jdcs_dev
  */
 public class RSearchCS extends Request {
+
 }

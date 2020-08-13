@@ -8,7 +8,10 @@ import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent;
 import com.google.common.eventbus.Subscribe;
 import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.LoggerFactory;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  *
@@ -16,9 +19,10 @@ import org.slf4j.LoggerFactory;
  */
 public class DataBaseHandler extends Thread implements Runnable {
 
-    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(DataBaseHandler.class);
-
     DataBaseHandler thisHandler = this;
+
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(DataBaseHandler.class);
+    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public DataBaseHandler() {
         registerEvent();
@@ -27,12 +31,7 @@ public class DataBaseHandler extends Thread implements Runnable {
     private void registerEvent() {
         EventHEADER.getBus_cs_save().register(thisHandler);
         EventHEADER.getMESSAGES_EVENT_BUS().register(thisHandler);
-        System.out.println("com.github.kvac.phoenix.server.db.DataBaseHandler.registerEvent()");
-    }
-
-    @Override
-    public void run() {
-
+        logger.info("com.github.kvac.phoenix.server.db.DataBaseHandler.registerEvent()");
     }
 
     @Subscribe
@@ -55,4 +54,13 @@ public class DataBaseHandler extends Thread implements Runnable {
         }
     }
 
+    @Override
+    public void run() {
+        executorService.scheduleAtFixedRate(DataBaseHandler::myTask, 0, 2, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(DataBaseHandler::myTask, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private static void myTask() {
+        System.out.println("Running");
+    }
 }
