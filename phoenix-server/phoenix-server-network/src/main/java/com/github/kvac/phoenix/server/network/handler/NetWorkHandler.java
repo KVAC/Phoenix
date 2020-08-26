@@ -1,7 +1,6 @@
 package com.github.kvac.phoenix.server.network.handler;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
-import com.github.kvac.phoenix.libs.objects.PhoenixObject;
+import com.github.kvac.phoenix.event.eventheader.EventHEADER;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.RSearchCS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.Request;

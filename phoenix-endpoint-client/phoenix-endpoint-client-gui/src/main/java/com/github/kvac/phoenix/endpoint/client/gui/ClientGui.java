@@ -7,7 +7,7 @@ package com.github.kvac.phoenix.endpoint.client.gui;
 
 import com.github.kvac.phoenix.endpoint.client.gui.searchcs.SearchCS;
 import com.github.kvac.phoenix.endpoint.client.network.NetWorkHeader;
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.event.eventheader.EventHEADER;
 import com.github.kvac.phoenix.event.PhoenixEvent;
 import com.github.kvac.phoenix.event.msg.MessageEvent;
 import com.github.kvac.phoenix.libs.objects.Message;

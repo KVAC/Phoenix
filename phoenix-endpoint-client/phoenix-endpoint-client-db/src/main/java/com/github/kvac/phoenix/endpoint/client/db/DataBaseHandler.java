@@ -1,6 +1,6 @@
 package com.github.kvac.phoenix.endpoint.client.db;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.event.eventheader.EventHEADER;
 import com.github.kvac.phoenix.event.PhoenixEvent;
 import com.github.kvac.phoenix.event.msg.MessageEvent;
 import com.github.kvac.phoenix.libs.objects.Message;

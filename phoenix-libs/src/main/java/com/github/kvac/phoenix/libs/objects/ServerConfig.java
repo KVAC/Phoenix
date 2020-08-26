@@ -29,4 +29,7 @@ public class ServerConfig {
     @Getter
     @Setter
     private String serverDB_DB;
+    @Getter
+    @Setter
+    private boolean debug;
 }

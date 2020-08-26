@@ -1,12 +1,14 @@
 package com.github.kvac.phoenix.server.init;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
 import com.github.kvac.phoenix.libs.network.Ping;
 import com.github.kvac.phoenix.server.db.DataBaseHeader;
 import com.github.kvac.phoenix.server.network.header.NetWorkHeader;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -15,37 +17,36 @@ import org.slf4j.LoggerFactory;
  */
 public class ServerInit {
 
-    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServerInit.class);
+    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    /**
-     * @param args
-     *
-     */
+    protected final org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
+
     public static void main(String[] args) {
+        ServerInit serverInit = new ServerInit();
+        serverInit.init();
+    }
+
+    private void init() {
         try {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                logger.info("EXIT");
+            }));
+
             DataBaseHeader.getDataBase().init();
-
             DataBaseHeader.getDataBase().connect();
-
             DataBaseHeader.getDataBase().create();
             DataBaseHeader.getDataBaseHandler().start();
 
-            NetWorkHeader.getMcssh().start();//MinaCSSessionHandler
             NetWorkHeader.getServer().start();
-
-            new Thread(() -> {
-                Ping pong = new Ping();
-                do {
-                    EventHEADER.getBus_Pong().post(pong);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ex) {
-                        logger.warn("", ex);
-                    }
-                } while (true);
-            }, "SERVER_PONG").start();
+            executorService.scheduleAtFixedRate(pingToClients(), 0, 2, TimeUnit.SECONDS);
         } catch (SQLException | IOException ex) {
             logger.warn("", ex);
         }
+    }
+
+    private Runnable pingToClients() {
+        return () -> {
+            NetWorkHeader.getAcceptor().broadcast(new Ping("Pong"));
+        };
     }
 }

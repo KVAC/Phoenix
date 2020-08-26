@@ -1,15 +1,14 @@
 package com.github.kvac.phoenix.endpoint.client.network;
 
+import com.github.kvac.phoenix.libs.network.Ping;
 import com.github.kvac.phoenix.libs.objects.Auth;
+import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.AuthRequest;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.Request;
-import java.util.Iterator;
-import java.util.Set;
 import lombok.Getter;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.FilterEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +16,6 @@ public class MinaClientHandler extends IoHandlerAdapter {
 
     @Getter
     protected final Logger loggerJ = LoggerFactory.getLogger(getClass());
-
-    @Override
-    public void messageSent(IoSession session, Object message) throws Exception {
-        super.messageSent(session, message); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
@@ -32,12 +26,6 @@ public class MinaClientHandler extends IoHandlerAdapter {
     @Override
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
         session.closeOnFlush();
-        //     super.sessionIdle(session, status); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void sessionCreated(IoSession session) throws Exception {
-        super.sessionCreated(session); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -46,16 +34,20 @@ public class MinaClientHandler extends IoHandlerAdapter {
         if (message instanceof Request) {
             Request request = (Request) message;
             if (request instanceof AuthRequest) {
-                //TODO NO AUTH
+
                 AuthRequest authRequest = (AuthRequest) request;
                 Auth auth = new Auth();
-                auth.setWho(NetWorkHeader.getMycs());
-                session.write(auth);
+                CS mycs = NetWorkHeader.getMycs();
+                auth.setWho(mycs);
+                //FIXME CLASS NOT FOUND
+                //  session.write(auth);
             }
+        } else if (message instanceof Ping) {
+            Ping ping = (Ping) message;
+            loggerJ.info(ping.getMessage());
         } else {
             loggerJ.info(message.toString());
         }
-
     }
 
     @Override
@@ -69,16 +61,6 @@ public class MinaClientHandler extends IoHandlerAdapter {
         String attr = "Values: ";
         session.setAttribute(attr);
         loggerJ.info(session.getAttribute(attr).toString());
-    }
-
-    @Override
-    public void event(IoSession session, FilterEvent event) throws Exception {
-        super.event(session, event); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void inputClosed(IoSession session) throws Exception {
-        super.inputClosed(session); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

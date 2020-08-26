@@ -2,13 +2,8 @@ package com.github.kvac.phoenix.endpoint.client.init;
 
 import com.github.kvac.phoenix.endpoint.client.db.DataBaseHeader;
 import com.github.kvac.phoenix.endpoint.client.gui.ClientGui;
-import com.github.kvac.phoenix.endpoint.client.gui.First_Settings;
+import com.github.kvac.phoenix.endpoint.client.gui.FirstSettings;
 import com.github.kvac.phoenix.endpoint.client.network.NetWorkHeader;
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
-import com.github.kvac.phoenix.libs.objects.cs.CS;
-import com.github.kvac.phoenix.libs.objects.events.MyEvent;
-import com.github.kvac.phoenix.libs.objects.events.MyEvent.TYPE;
-import com.github.kvac.phoenix.libs.objects.events.ra.request.MessageRequest;
 import com.j256.ormlite.logger.LocalLog;
 import com.j256.ormlite.logger.Log.Level;
 import java.io.BufferedReader;
@@ -20,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phoenixendpointclient.phoenix.endpoint.client.events.ClientEventHEADER;
 
 public class ClientInit {
 
@@ -38,15 +32,16 @@ public class ClientInit {
         // Мои настройки
         if (DataBaseHeader.getDataBase().getSettingsDao().countOf() == 0) {
             logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawwwwwwwwwwwwwwwwwwww");
-            First_Settings first_Settings = new First_Settings();
-            first_Settings.setVisible(true);
+            FirstSettings firstSettings = new FirstSettings();
+            firstSettings.setVisible(true);
 
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
-                logger.error(e.toString());
+                logger.error("", e);
+                //IGNORE
             }
-            first_Settings.getTextArea1().setText(first_Settings.getTextArea1().getText().replaceAll("\\s", ""));
+            firstSettings.getTextArea1().setText(firstSettings.getTextArea1().getText().replaceAll("\\s", ""));
             while (!InitUtils.checkSettingsAv()) {
                 //
                 //
@@ -56,7 +51,7 @@ public class ClientInit {
                     logger.error("IN while (!InitUtils.checkSettingsAv())", e);
                 }
             }
-            first_Settings.setVisible(false);
+            firstSettings.setVisible(false);
 
         }
         // Мои настройки
@@ -73,46 +68,32 @@ public class ClientInit {
         ClientGui clientGui = new ClientGui();
         clientGui.setVisible(true);
 
-        new Thread(() -> {
-            Thread.currentThread().setName("My cs sender Thread");
-            do {
-                CS cs = NetWorkHeader.getMycs();
-                MyEvent event = new MyEvent();
-                event.setObject(cs);
-                event.setType(TYPE.CS_C);
-                EventHEADER.getBus_cs_clear().post(event);
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    logger.error(Thread.currentThread().getName(), e);
-                }
-            } while (true);
-        }).start();
-
-        new Thread(() -> {
-            Thread.currentThread().setName("INFO");
-            do {
-
-                //  System.out.println(INFO.getExternalIP());
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    logger.error(Thread.currentThread().getName(), e);
-                }
-            } while (true);
-        }).start();
-        new Thread(() -> {
-            do {
-                MessageRequest request = new MessageRequest();
-                request.setWho(NetWorkHeader.getMycs());
-                ClientEventHEADER.getREQUEST_REMOTE_EVENT_BUS().post(request);
-                try {
-                    Thread.sleep(2500);
-                } catch (InterruptedException ex) {
-                    logger.error("", ex);
-                }
-            } while (true);
-        }, "MessageGetterNet").start();
+        //NETWORK
+        //NETWORK
+        /**
+         *
+         * new Thread(() -> { Thread.currentThread().setName("My cs sender
+         * Thread"); do { CS cs = NetWorkHeader.getMycs(); MyEvent event = new
+         * MyEvent(); event.setObject(cs); event.setType(TYPE.CS_C);
+         * EventHEADER.getBus_cs_clear().post(event); try { Thread.sleep(3000);
+         * } catch (InterruptedException e) {
+         * logger.error(Thread.currentThread().getName(), e); } } while (true);
+         * }).start();
+         *
+         * new Thread(() -> { Thread.currentThread().setName("INFO"); do {
+         *
+         * // System.out.println(INFO.getExternalIP()); try {
+         * Thread.sleep(3000); } catch (InterruptedException e) {
+         * logger.error(Thread.currentThread().getName(), e); } } while (true);
+         * }).start(); new Thread(() -> { do { MessageRequest request = new
+         * MessageRequest(); request.setWho(NetWorkHeader.getMycs());
+         * ClientEventHEADER.getREQUEST_REMOTE_EVENT_BUS().post(request); try {
+         * Thread.sleep(2500); } catch (InterruptedException ex) {
+         * logger.error("", ex); } } while (true); },
+         * "MessageGetterNet").start();
+         *
+         *
+         */
     }
 
     public static String getExternalIpAdress() throws IOException {

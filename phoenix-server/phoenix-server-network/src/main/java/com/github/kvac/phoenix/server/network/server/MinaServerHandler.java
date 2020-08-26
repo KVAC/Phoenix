@@ -1,19 +1,16 @@
 package com.github.kvac.phoenix.server.network.server;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.event.eventheader.EventHEADER;
 import com.github.kvac.phoenix.libs.network.Ping;
 import com.github.kvac.phoenix.libs.objects.Auth;
 import com.github.kvac.phoenix.libs.objects.Message;
-import com.github.kvac.phoenix.libs.objects.PhoenixObject;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.AuthRequest;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.MessageRequest;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.RSearchCS;
 import com.github.kvac.phoenix.libs.objects.events.ra.request.Request;
 import com.github.kvac.phoenix.server.db.DataBaseHeader;
-import com.github.kvac.phoenix.server.network.header.NetWorkHeader;
 import com.github.kvac.phoenix.server.network.handler.NetWorkHandler;
-import com.google.common.eventbus.Subscribe;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import java.sql.SQLException;
@@ -73,7 +70,6 @@ public class MinaServerHandler extends IoHandlerAdapter {
 
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
-        loggerJ.info("messageReceived");
         if (message instanceof Auth) {
             Auth auth = (Auth) message;
             // setClientCS(auth.getWho());
@@ -122,16 +118,6 @@ public class MinaServerHandler extends IoHandlerAdapter {
             loggerJ.info("message:" + message.getClass() + ":" + message.toString());
             NetWorkHandler.handleOtherObject(message);
         }
-    }
-
-    @Override
-    public void event(IoSession session, FilterEvent event) throws Exception {
-        super.event(session, event);
-    }
-
-    @Override
-    public void inputClosed(IoSession session) throws Exception {
-        super.inputClosed(session);
     }
 
     @Override

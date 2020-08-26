@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +22,9 @@ import org.slf4j.LoggerFactory;
  * @author jdcs_dev
  */
 @Getter
-public class First_Settings extends javax.swing.JFrame {
+public class FirstSettings extends javax.swing.JFrame {
 
-    transient protected static final Logger logger = LoggerFactory.getLogger(First_Settings.class);
+    transient Logger logger = LoggerFactory.getLogger(getClass());
 
     transient ArrayList<S> serversList = new ArrayList<>();
 
@@ -42,7 +41,7 @@ public class First_Settings extends javax.swing.JFrame {
     /**
      * Creates new form First_Settings
      */
-    public First_Settings() {
+    public FirstSettings() {
         initComponents();
     }
 
@@ -86,7 +85,7 @@ public class First_Settings extends javax.swing.JFrame {
         checkbox_NameValid.setLabel("Имя корректное");
         checkbox_NameValid.setState(true);
 
-        textArea1.setText("skanfa.asuscomm.com:2000,localhost:2000,skanfa.asuscomm.com:5000,localhost:5000      ");
+        textArea1.setText("skanfa.theworkpc.com:31000,localhost:31000      ");
         textArea1.addTextListener(new java.awt.event.TextListener() {
             public void textValueChanged(java.awt.event.TextEvent evt) {
                 serverChanged(evt);
@@ -248,7 +247,7 @@ public class First_Settings extends javax.swing.JFrame {
 
             }
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(First_Settings.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("", ex);
         }
 
         serversList.forEach((s) -> {
@@ -257,7 +256,7 @@ public class First_Settings extends javax.swing.JFrame {
             try {
                 DataBaseHeader.getDataBase().saveServer(s);
             } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(First_Settings.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error("serversList", ex);
             }
         });
 

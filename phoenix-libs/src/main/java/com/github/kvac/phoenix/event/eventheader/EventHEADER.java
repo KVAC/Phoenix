@@ -1,10 +1,12 @@
-package com.github.kvac.phoenix.event.EventHEADER;
+package com.github.kvac.phoenix.event.eventheader;
 
 import com.google.common.eventbus.EventBus;
-
 import lombok.Getter;
 
 public class EventHEADER {
+
+    private EventHEADER() {
+    }
 
     @Getter
     private static final EventBus MESSAGES_EVENT_BUS = new EventBus();

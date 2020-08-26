@@ -73,7 +73,6 @@ public class Database {
         }
 
         ServerConfig configR = mapper.readValue(configFile, ServerConfig.class);
-
         logger.info(ReflectionToStringBuilder.toString(configR, ToStringStyle.MULTI_LINE_STYLE));
 
         DataBaseHeader.setConfig(configR);
@@ -89,8 +88,7 @@ public class Database {
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(DataBaseHeader.dbPATH.toString(),
                 DataBaseHeader.getConfig().getServerDB_username(), DataBaseHeader.getConfig().getServerDB_pass());
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-        GenericObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<PoolableConnection>(
-                poolableConnectionFactory);
+        GenericObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
         poolableConnectionFactory.setPool(connectionPool);
         return new PoolingDataSource<>(connectionPool);
     }

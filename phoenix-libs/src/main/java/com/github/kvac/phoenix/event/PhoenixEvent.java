@@ -13,7 +13,7 @@ public class PhoenixEvent implements Serializable {
 
     private static final long serialVersionUID = 240513231950251807L;
 
-    public static enum TYPE {
+    public enum TYPE {
         MESSAGE_SHOW, MESSAGE_SAVE, MESSAGE_CLEAR
     }
     @Getter

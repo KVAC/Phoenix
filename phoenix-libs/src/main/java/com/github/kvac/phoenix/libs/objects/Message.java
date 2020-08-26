@@ -1,6 +1,6 @@
 package com.github.kvac.phoenix.libs.objects;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.event.eventheader.EventHEADER;
 import com.github.kvac.phoenix.event.PhoenixEvent.TYPE;
 import com.github.kvac.phoenix.event.msg.MessageEvent;
 import com.github.kvac.phoenix.libs.objects.cs.CS;
@@ -50,7 +50,7 @@ public class Message extends PhoenixObject implements Serializable {
     @Getter
     @Setter
     @DatabaseField
-    private String message_encrypted;
+    private String messageEncrypted;
 
     public enum StatusType {
         CREATED, DELIVERED
@@ -89,7 +89,4 @@ public class Message extends PhoenixObject implements Serializable {
         EventHEADER.getMESSAGES_EVENT_BUS().post(event);
     }
 
-    // public int compareTo(Message o) {
-    //    return this.timeCreated < o.timeCreated ? -1 : this.timeCreated > o.timeCreated ? 1 : 0;
-    // }
 }

@@ -1,6 +1,6 @@
 package com.github.kvac.phoenix.server.db;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.event.eventheader.EventHEADER;
 import com.github.kvac.phoenix.event.PhoenixEvent;
 import com.github.kvac.phoenix.event.msg.MessageEvent;
 import com.github.kvac.phoenix.libs.objects.Message;
@@ -9,7 +9,6 @@ import com.github.kvac.phoenix.libs.objects.events.MyEvent;
 import com.google.common.eventbus.Subscribe;
 import java.sql.SQLException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import org.slf4j.LoggerFactory;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -56,11 +55,10 @@ public class DataBaseHandler extends Thread implements Runnable {
 
     @Override
     public void run() {
-        executorService.scheduleAtFixedRate(DataBaseHandler::myTask, 0, 2, TimeUnit.SECONDS);
-        executorService.scheduleAtFixedRate(DataBaseHandler::myTask, 0, 1, TimeUnit.SECONDS);
+        //executorService.scheduleAtFixedRate(DataBaseHandler::myTask, 0, 2, TimeUnit.SECONDS);
     }
 
     private static void myTask() {
-        System.out.println("Running");
+
     }
 }

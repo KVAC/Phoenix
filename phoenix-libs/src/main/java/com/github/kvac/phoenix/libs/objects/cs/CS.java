@@ -2,7 +2,7 @@ package com.github.kvac.phoenix.libs.objects.cs;
 
 import java.io.Serializable;
 
-import com.github.kvac.phoenix.event.EventHEADER.EventHEADER;
+import com.github.kvac.phoenix.event.eventheader.EventHEADER;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent;
 import com.github.kvac.phoenix.libs.objects.events.MyEvent.TYPE;
 import com.j256.ormlite.field.DatabaseField;
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 @DatabaseTable(tableName = "CS")
 public class CS implements Serializable {
 
-    protected static final Logger logger = LoggerFactory.getLogger(CS.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final long serialVersionUID = -1806362634493171206L;
 
@@ -45,7 +45,7 @@ public class CS implements Serializable {
     @Getter
     @Setter
     @DatabaseField
-    private long address_time;
+    private long addressTime;
 
     @Getter
     @Setter
@@ -92,7 +92,7 @@ public class CS implements Serializable {
             event.setType(TYPE.DATABASE_CS_SAVE);
             event.setObject(this);
             EventHEADER.getBus_cs_save().post(event);
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             logger.error("CS.save():EVENT ", e);
         }
     }
@@ -100,7 +100,7 @@ public class CS implements Serializable {
     @Override
     public String toString() {
         return "CS [ID=" + id + ", name=" + name + ", nameTime=" + nameTime + ", Address=" + address + ", Address_time="
-                + address_time + ", addressFSocket=" + addressFSocket + ", addressFSocketTime=" + addressFSocketTime
+                + addressTime + ", addressFSocket=" + addressFSocket + ", addressFSocketTime=" + addressFSocketTime
                 + ", Port=" + port + ", PortTime=" + portTime + ", itsMe=" + itsMe + ", port_updaterTime="
                 + portUpdaterTime + ", port_updater=" + portUpdater + "]";
     }
